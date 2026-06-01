@@ -1,0 +1,140 @@
+{
+  "located_source": {
+    "lat": 42.907139343324545,
+    "lon": -71.04031337852618,
+    "alt_km": 72.44739112071859,
+    "t0_s": 9.599455738392393,
+    "celerity_kms": 0.39064259865031953
+  },
+  "estimates": {
+    "D": {
+      "method": "infrasound period-yield (ReVelle 1997 / AFTAC)",
+      "per_station": [
+        {
+          "code": "N4.G62A",
+          "period_s": 2.48,
+          "amp_pa": 0.504,
+          "range_km": 270.1
+        },
+        {
+          "code": "N4.H62A",
+          "period_s": 3.85,
+          "amp_pa": 0.909,
+          "range_km": 199.2
+        },
+        {
+          "code": "N4.I62A",
+          "period_s": 1.77,
+          "amp_pa": 2.751,
+          "range_km": 131.9
+        },
+        {
+          "code": "N4.I63A",
+          "period_s": 1.25,
+          "amp_pa": 0.642,
+          "range_km": 151.0
+        },
+        {
+          "code": "N4.K62A",
+          "period_s": 1.2,
+          "amp_pa": 0.28,
+          "range_km": 124.4
+        },
+        {
+          "code": "N4.L61B",
+          "period_s": 4.3,
+          "amp_pa": 0.421,
+          "range_km": 160.6
+        },
+        {
+          "code": "N4.M63A",
+          "period_s": 1.77,
+          "amp_pa": 6.521,
+          "range_km": 200.2
+        }
+      ],
+      "geom_mean_period_s": 2.12,
+      "period_range_s": [
+        1.2,
+        4.3
+      ],
+      "yield_kt_by_relation": {
+        "ReVelle1997 (W<200kt)": 0.0647,
+        "Ens2012 a": 0.0531,
+        "Ens2012 b": 0.0605
+      },
+      "yield_kt": 0.06474736070240554,
+      "yield_kt_range": [
+        0.0531,
+        0.0647
+      ],
+      "yield_tons": 64.74736070240554
+    },
+    "B": {
+      "method": "DYFI felt overpressure -> Collins (2005) airburst inversion",
+      "assumed_peak_overpressure_pa": [
+        10.0,
+        100.0
+      ],
+      "assumed_burst_altitude_km": [
+        40.0,
+        64.0
+      ],
+      "maxmmi": "4.6",
+      "numResp": "411",
+      "nearest_felt_km": 11.3,
+      "yield_kt": 0.068,
+      "yield_kt_range": [
+        0.0016,
+        2.9078
+      ],
+      "yield_tons": 67.9548792721206
+    },
+    "C": {
+      "method": "infrasound acoustic energy-flux bound (fluence x area / efficiency)",
+      "acoustic_efficiency_range": [
+        0.0001,
+        0.01
+      ],
+      "radiated_acoustic_energy_J": 6147878485.912555,
+      "per_station": [
+        {
+          "code": "N4.G62A",
+          "range_km": 270.1,
+          "fluence_J_m2": 0.0061
+        },
+        {
+          "code": "N4.H62A",
+          "range_km": 199.2,
+          "fluence_J_m2": 0.0165
+        },
+        {
+          "code": "N4.I63A",
+          "range_km": 151.0,
+          "fluence_J_m2": 0.0217
+        },
+        {
+          "code": "N4.L61B",
+          "range_km": 160.6,
+          "fluence_J_m2": 0.0049
+        },
+        {
+          "code": "N4.M63A",
+          "range_km": 200.2,
+          "fluence_J_m2": 1.2289
+        }
+      ],
+      "yield_kt": 1.4694,
+      "yield_kt_range": [
+        0.1469,
+        14.6938
+      ],
+      "yield_tons": 1469.3782232104577,
+      "note": "Order-of-magnitude bound: acoustic efficiency spans ~1e-4..1e-2 and hemispherical spreading is assumed."
+    }
+  },
+  "acoustic_geom_mean_kt": 0.18633324161371573,
+  "nasa_kt": 0.3,
+  "ratio_acoustic_over_nasa": 0.6211108053790525,
+  "verdict": "CONSISTENT with"
+}

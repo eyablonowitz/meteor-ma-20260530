@@ -1,0 +1,45 @@
+{
+  "acoustic_azimuth_test": {
+    "amplitude": 18.427311018134862,
+    "direction_deg": 86.41847401205574,
+    "rms_base": 15.808306642735467,
+    "rms_full": 13.180228962075883,
+    "azimuthal_variance_explained": 0.30485531540802424,
+    "coef": [
+      9.454598039639665,
+      1.1511305356818486,
+      18.391321046865972
+    ],
+    "n": 15,
+    "resid_std_s": 15.808306642735467
+  },
+  "acoustic_state": "marginal",
+  "acoustic_azimuth_gap_deg": 155.13979266347445,
+  "dyfi_isotropy_test": {
+    "amplitude": 0.5503614214422604,
+    "direction_deg": 181.4316925493539,
+    "rms_base": 0.7093014989242895,
+    "rms_full": 0.6786128046155749,
+    "azimuthal_variance_explained": 0.08466020338672653,
+    "coef": [
+      3.2995940220540065,
+      -0.3858267060013662,
+      -0.5501896109605675,
+      -0.013750861900431567
+    ],
+    "n": 95,
+    "intensity_std": 0.7195982258512033
+  },
+  "dyfi_isotropic": true,
+  "double_boom": {
+    "double_boom_widely_reported": true,
+    "multiple_discrete_booms": true,
+    "note": "News/AMS reports consistently describe a *double* boom and, in some witness accounts, multiple discrete booms - the signature of a fragmentation cascade rather than a single smooth sonic boom."
+  },
+  "evidence": [
+    "acoustic residuals show only a MARGINAL azimuthal dipole (amp 18 s ~ timing scatter 16 s, 30% of variance, toward 86 deg); with a 155 deg azimuth gap (ocean) this is suggestive, not conclusive, of a ballistic component broadside to a ~N-S track",
+    "DYFI felt pattern ~azimuthally isotropic after distance detrend (8% of variance) -> concentric, point-like felt field",
+    "widely reported DOUBLE boom -> discrete fragmentation pulses (airburst cascade), not a single smooth sonic boom"
+  ],
+  "verdict": "AIRBURST-DOMINATED. The felt/heard pressure wave is best explained by a near-point, high-altitude fragmentation: the felt field is concentric and the source localizes to a point. The double boom indicates a fragmentation cascade. A secondary ballistic sonic boom along the steep ~N-S track is plausible (a marginal E-W acoustic-residual dipole) but is at the noise level and not conclusively resolved with this network."
+}

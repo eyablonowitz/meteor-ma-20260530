@@ -1,0 +1,39 @@
+{
+  "tag": "ERA5 proxy: 2026-05-25, 2026-05-26, 2026-05-27 @ 12:00 UTC (3 d before event)",
+  "meta": {
+    "mode": "proxy",
+    "days": [
+      "2026-05-25",
+      "2026-05-26",
+      "2026-05-27"
+    ],
+    "time": "12:00",
+    "cutoff": "2026-05-27 12:00",
+    "lag_days": 3,
+    "area_NWSE": [
+      44.4,
+      -73.04,
+      41.4,
+      -69.04
+    ],
+    "event_utc": "2026-05-30T18:06:00Z"
+  },
+  "era5_top_km": 48.71,
+  "strat_mean_wind_ms": 6.0,
+  "strat_toward_az_deg": 259.0,
+  "trop_mean_wind_ms": 16.6,
+  "trop_toward_az_deg": 88.8,
+  "strat_duct_az_deg": 265.0,
+  "strat_duct_strength_pct": 1.65,
+  "strat_first_return_km": 301.2,
+  "trop_duct_az_deg": 90.0,
+  "trop_duct_strength_pct": 1.33,
+  "trop_first_return_km": 79.0,
+  "beaming_alignment": {
+    "n_strong": 30,
+    "n_weak": 30,
+    "mean_duct_strength_strong": -0.0033,
+    "mean_duct_strength_weak": -0.0033,
+    "strong_minus_weak": -0.0
+  }
+}

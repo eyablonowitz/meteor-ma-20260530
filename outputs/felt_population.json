@@ -1,0 +1,242 @@
+{
+  "source": [
+    42.907139343324545,
+    -71.04031337852618
+  ],
+  "catchment_km": 12.0,
+  "cities": [
+    {
+      "city": "Portland ME",
+      "lat": 43.66,
+      "lon": -70.26,
+      "pop": 68408,
+      "responses": 0,
+      "dist_km": 104.9,
+      "az_deg": 37.0,
+      "ns_km": 84.0,
+      "per_100k": 0.0
+    },
+    {
+      "city": "Biddeford ME",
+      "lat": 43.49,
+      "lon": -70.45,
+      "pop": 22552,
+      "responses": 0,
+      "dist_km": 80.6,
+      "az_deg": 36.0,
+      "ns_km": 65.0,
+      "per_100k": 0.0
+    },
+    {
+      "city": "Rochester NH",
+      "lat": 43.3,
+      "lon": -70.98,
+      "pop": 32492,
+      "responses": 0,
+      "dist_km": 44.0,
+      "az_deg": 6.0,
+      "ns_km": 44.0,
+      "per_100k": 0.0
+    },
+    {
+      "city": "Concord NH",
+      "lat": 43.21,
+      "lon": -71.54,
+      "pop": 43976,
+      "responses": 0,
+      "dist_km": 52.7,
+      "az_deg": 310.0,
+      "ns_km": 34.0,
+      "per_100k": 0.0
+    },
+    {
+      "city": "Dover NH",
+      "lat": 43.2,
+      "lon": -70.87,
+      "pop": 32741,
+      "responses": 1,
+      "dist_km": 35.4,
+      "az_deg": 23.0,
+      "ns_km": 33.0,
+      "per_100k": 3.05
+    },
+    {
+      "city": "Portsmouth NH",
+      "lat": 43.07,
+      "lon": -70.76,
+      "pop": 21956,
+      "responses": 1,
+      "dist_km": 29.1,
+      "az_deg": 51.0,
+      "ns_km": 18.0,
+      "per_100k": 4.55
+    },
+    {
+      "city": "Manchester NH",
+      "lat": 42.99,
+      "lon": -71.46,
+      "pop": 115644,
+      "responses": 0,
+      "dist_km": 35.4,
+      "az_deg": 285.0,
+      "ns_km": 9.0,
+      "per_100k": 0.0
+    },
+    {
+      "city": "Haverhill MA",
+      "lat": 42.78,
+      "lon": -71.08,
+      "pop": 67787,
+      "responses": 8,
+      "dist_km": 14.5,
+      "az_deg": 193.0,
+      "ns_km": -14.0,
+      "per_100k": 11.8
+    },
+    {
+      "city": "Nashua NH",
+      "lat": 42.77,
+      "lon": -71.46,
+      "pop": 91322,
+      "responses": 2,
+      "dist_km": 37.5,
+      "az_deg": 246.0,
+      "ns_km": -15.0,
+      "per_100k": 2.19
+    },
+    {
+      "city": "Lawrence MA",
+      "lat": 42.71,
+      "lon": -71.16,
+      "pop": 89143,
+      "responses": 4,
+      "dist_km": 24.0,
+      "az_deg": 204.0,
+      "ns_km": -22.0,
+      "per_100k": 4.49
+    },
+    {
+      "city": "Lowell MA",
+      "lat": 42.63,
+      "lon": -71.32,
+      "pop": 115554,
+      "responses": 8,
+      "dist_km": 38.4,
+      "az_deg": 217.0,
+      "ns_km": -31.0,
+      "per_100k": 6.92
+    },
+    {
+      "city": "Salem MA",
+      "lat": 42.52,
+      "lon": -70.9,
+      "pop": 44480,
+      "responses": 42,
+      "dist_km": 44.5,
+      "az_deg": 165.0,
+      "ns_km": -43.0,
+      "per_100k": 94.42
+    },
+    {
+      "city": "Lynn MA",
+      "lat": 42.47,
+      "lon": -70.95,
+      "pop": 101253,
+      "responses": 21,
+      "dist_km": 49.2,
+      "az_deg": 171.0,
+      "ns_km": -49.0,
+      "per_100k": 20.74
+    },
+    {
+      "city": "Somerville MA",
+      "lat": 42.39,
+      "lon": -71.1,
+      "pop": 81045,
+      "responses": 85,
+      "dist_km": 57.7,
+      "az_deg": 185.0,
+      "ns_km": -57.0,
+      "per_100k": 104.88
+    },
+    {
+      "city": "Cambridge MA",
+      "lat": 42.37,
+      "lon": -71.11,
+      "pop": 118403,
+      "responses": 69,
+      "dist_km": 60.0,
+      "az_deg": 185.0,
+      "ns_km": -60.0,
+      "per_100k": 58.28
+    },
+    {
+      "city": "Boston MA",
+      "lat": 42.36,
+      "lon": -71.06,
+      "pop": 675647,
+      "responses": 56,
+      "dist_km": 60.9,
+      "az_deg": 182.0,
+      "ns_km": -61.0,
+      "per_100k": 8.29
+    },
+    {
+      "city": "Framingham MA",
+      "lat": 42.28,
+      "lon": -71.42,
+      "pop": 72362,
+      "responses": 25,
+      "dist_km": 76.3,
+      "az_deg": 204.0,
+      "ns_km": -70.0,
+      "per_100k": 34.55
+    },
+    {
+      "city": "Worcester MA",
+      "lat": 42.26,
+      "lon": -71.8,
+      "pop": 206518,
+      "responses": 1,
+      "dist_km": 95.1,
+      "az_deg": 221.0,
+      "ns_km": -72.0,
+      "per_100k": 0.48
+    },
+    {
+      "city": "Quincy MA",
+      "lat": 42.25,
+      "lon": -71.0,
+      "pop": 101636,
+      "responses": 8,
+      "dist_km": 73.1,
+      "az_deg": 177.0,
+      "ns_km": -73.0,
+      "per_100k": 7.87
+    },
+    {
+      "city": "Brockton MA",
+      "lat": 42.08,
+      "lon": -71.02,
+      "pop": 105643,
+      "responses": 2,
+      "dist_km": 92.0,
+      "az_deg": 179.0,
+      "ns_km": -92.0,
+      "per_100k": 1.89
+    },
+    {
+      "city": "Providence RI",
+      "lat": 41.82,
+      "lon": -71.41,
+      "pop": 190934,
+      "responses": 33,
+      "dist_km": 124.6,
+      "az_deg": 194.0,
+      "ns_km": -121.0,
+      "per_100k": 17.28
+    }
+  ],
+  "north_per_100k": 0.59,
+  "south_per_100k": 17.66
+}

@@ -1,0 +1,110 @@
+{
+  "best_fit": {
+    "lat": 42.907139343324545,
+    "lon": -71.04031337852618,
+    "alt_km": 72.44739112071859,
+    "t0_s": 9.599455738392393,
+    "celerity_kms": 0.39064259865031953
+  },
+  "fit": {
+    "rms_s": 13.091776054180146,
+    "weighted_rms": 1.1394247623676805,
+    "n_inliers": 9,
+    "n_total": 25
+  },
+  "bootstrap": {
+    "lat": {
+      "median": 42.89041985400307,
+      "std": 0.04417122129101383,
+      "p16": 42.847999840088576,
+      "p84": 42.92095141657063
+    },
+    "lon": {
+      "median": -71.019946586691,
+      "std": 0.12051708247638741,
+      "p16": -71.12303647505236,
+      "p84": -70.92681230493531
+    },
+    "alt_km": {
+      "median": 61.3428262679258,
+      "std": 34.31141275448865,
+      "p16": 2.086472091362701e-06,
+      "p84": 89.99999999999999
+    },
+    "t0_s": {
+      "median": 40.73208457307199,
+      "std": 47.825282837899664,
+      "p16": -32.32524359027041,
+      "p84": 69.72166170087732
+    },
+    "c_kms": {
+      "median": 0.4051950849164223,
+      "std": 0.02308352614919284,
+      "p16": 0.37309344588802484,
+      "p84": 0.41999999999999993
+    }
+  },
+  "references": {
+    "USGS_DYFI": {
+      "lat": 42.8,
+      "lon": -70.9,
+      "alt_km": 0.0,
+      "horiz_km": 16.5
+    },
+    "NASA_BREAKUP": {
+      "lat": 42.9,
+      "lon": -70.85,
+      "alt_km": 64.0,
+      "horiz_km": 15.5
+    },
+    "GOES_FLASH": {
+      "lat": 41.95,
+      "lon": -70.45,
+      "alt_km": 40.0,
+      "horiz_km": 116.9
+    }
+  },
+  "celerity_sensitivity": {
+    "c=0.3": {
+      "lat": 42.918,
+      "lon": -71.072,
+      "alt_km": 89.6,
+      "t0_s": -150.0
+    },
+    "c=0.34": {
+      "lat": 42.869,
+      "lon": -71.023,
+      "alt_km": 90.0,
+      "t0_s": -90.2
+    }
+  },
+  "assessment": {
+    "epicenter_well_constrained": true,
+    "epicenter_1sigma_km": {
+      "lat": 4.9,
+      "lon": 9.8
+    },
+    "altitude_constrained": false,
+    "altitude_note": "Altitude/celerity/emission-time are degenerate with this network (nearest infrasound 96 km, no sub-60 km stations): the epicenter is well resolved but altitude is not independently determined. Fixing a physical celerity (0.30-0.34 km/s) implies a high-altitude source (tens of km) with emission ~1 min before the rounded 18:06 flash, consistent with a high-altitude airburst."
+  },
+  "outliers": [
+    "N4.I62A",
+    "N4.I63A",
+    "N4.J61A",
+    "N4.L61B",
+    "NE.TRY",
+    "NE.WES",
+    "US.LBNH"
+  ],
+  "inlier_stations": [
+    "IU.HRV",
+    "LD.ACCN",
+    "N4.G62A",
+    "N4.H62A",
+    "N4.K62A",
+    "N4.L64A",
+    "N4.M63A",
+    "NE.HNH",
+    "NE.WSPT"
+  ]
+}

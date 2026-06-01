@@ -1,0 +1,23 @@
+{
+  "ussa_ground_c_ms": 340.2804809644538,
+  "ussa_stratopause_c_ms": 329.7856405233557,
+  "duct_threshold_downwind_ms": 10.494840441098063,
+  "scenario": {
+    "trop": {
+      "center": 10.0,
+      "sigma": 4.0,
+      "speed": 25.0,
+      "toward_az_deg": 185.0
+    },
+    "strat": {
+      "center": 50.0,
+      "sigma": 13.0,
+      "speed": 38.0,
+      "toward_az_deg": 190.0
+    }
+  },
+  "south_duct_strength_pct": 7.69,
+  "south_first_return_km": 293.8,
+  "north_duct_strength_pct": -13.63,
+  "north_first_return_km": null
+}

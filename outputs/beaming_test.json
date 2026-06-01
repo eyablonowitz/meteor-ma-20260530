@@ -1,0 +1,62 @@
+{
+  "near_km": 100.0,
+  "am_quadrant_summary": {
+    "N": {
+      "n": 3,
+      "n_detect": 2,
+      "detect_frac": 0.67,
+      "median_snr": 4.77,
+      "median_app_vel": 0.334
+    },
+    "W": {
+      "n": 4,
+      "n_detect": 4,
+      "detect_frac": 1.0,
+      "median_snr": 15.93,
+      "median_app_vel": 0.258
+    },
+    "S": {
+      "n": 22,
+      "n_detect": 21,
+      "detect_frac": 0.95,
+      "median_snr": 78.03,
+      "median_app_vel": 0.259
+    }
+  },
+  "near_north_stations": [
+    {
+      "code": "AM.RED1B",
+      "net": "AM",
+      "dist": 37.33,
+      "az": 356.7,
+      "quad": "N",
+      "is_am": true,
+      "seis_snr": 4.32,
+      "seis_trig": true,
+      "app_vel": 0.2832
+    },
+    {
+      "code": "AM.R7591",
+      "net": "AM",
+      "dist": 79.82,
+      "az": 318.2,
+      "quad": "N",
+      "is_am": true,
+      "seis_snr": 4.77,
+      "seis_trig": false,
+      "app_vel": 0.1728
+    },
+    {
+      "code": "AM.RB3CB",
+      "net": "AM",
+      "dist": 86.08,
+      "az": 31.4,
+      "quad": "N",
+      "is_am": true,
+      "seis_snr": 8.26,
+      "seis_trig": true,
+      "app_vel": 0.3851
+    }
+  ],
+  "n_stations_measured": 60
+}

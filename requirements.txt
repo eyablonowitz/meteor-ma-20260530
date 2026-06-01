@@ -1,0 +1,20 @@
+# Seismo-Acoustic Bolide Analysis - Python dependencies
+# Pinned loosely; ObsPy pulls numpy/scipy/matplotlib/lxml/requests as deps.
+# NOTE: install into a dedicated venv (see README). ObsPy needs a CPython with
+# published wheels for numpy/scipy (3.11-3.13 are safe; 3.14 may lack wheels).
+
+obspy>=1.4.1
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+pandas>=2.0
+folium>=0.15
+requests>=2.31
+# Atmospheric model for the ray-trace (NRLMSIS temperature); ships wheels.
+pymsis>=0.10
+# Real atmospheric winds for the ray-trace: ERA5 reanalysis via the Copernicus
+# Climate Data Store. cdsapi needs ~/.cdsapirc (url + personal access token);
+# xarray+netCDF4 read the returned pressure-level NetCDF.
+cdsapi>=0.7.2
+xarray>=2024.0
+netCDF4>=1.6

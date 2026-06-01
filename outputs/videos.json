@@ -1,0 +1,59 @@
+{
+  "source": {
+    "lat": 42.907139343324545,
+    "lon": -71.04031337852618,
+    "alt_km": 72.44739112071859,
+    "t0_s": 9.599455738392393,
+    "celerity_kms": 0.39064259865031953
+  },
+  "reported_boom_delay_s": [
+    300.0,
+    360.0
+  ],
+  "city_predictions": [
+    {
+      "city": "Boston, MA",
+      "horiz_km": 60.9,
+      "pred_delay_s": 251.8,
+      "pred_boom_edt": "2:10:11 pm EDT"
+    },
+    {
+      "city": "Cambridge, MA",
+      "horiz_km": 60.0,
+      "pred_delay_s": 250.4,
+      "pred_boom_edt": "2:10:10 pm EDT"
+    },
+    {
+      "city": "Salem, MA",
+      "horiz_km": 44.5,
+      "pred_delay_s": 227.3,
+      "pred_boom_edt": "2:09:47 pm EDT"
+    },
+    {
+      "city": "Providence, RI",
+      "horiz_km": 124.6,
+      "pred_delay_s": 378.7,
+      "pred_boom_edt": "2:12:18 pm EDT"
+    },
+    {
+      "city": "Worcester, MA",
+      "horiz_km": 95.1,
+      "pred_delay_s": 315.7,
+      "pred_boom_edt": "2:11:15 pm EDT"
+    },
+    {
+      "city": "Portsmouth, NH",
+      "horiz_km": 29.1,
+      "pred_delay_s": 209.5,
+      "pred_boom_edt": "2:09:29 pm EDT"
+    },
+    {
+      "city": "Cape Cod (Hyannis), MA",
+      "horiz_km": 153.1,
+      "pred_delay_s": 443.3,
+      "pred_boom_edt": "2:13:23 pm EDT"
+    }
+  ],
+  "reported_consistent": true,
+  "n_social_posts": 0
+}
