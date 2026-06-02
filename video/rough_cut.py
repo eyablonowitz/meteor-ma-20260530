@@ -1,0 +1,325 @@
+"""Assemble a rough cut: real Manim science clips + comic panels + scratch VO.
+
+For each scene we pair the narration (video/assets/vo/<key>.mp3) with a visual:
+  - scenes 5-10 -> the rendered Manim clips (5=the_work, 6=sightings,
+    7=flash/sound, 8=triangulation, 9=TNT meter, 10a/b/c=southern_mystery)
+  - scenes 1-4, 11 -> AI comic panels (video/assets/comic/*.png) with a gentle
+    Ken-Burns move (slow push-in / pull-out). A panel can be split into several
+    "shots" that hard-cut on a narration cue -- e.g. Scene 1 holds on a calm
+    "before" frame, then cuts to the BOOM frame right on the word "boom".
+    If a panel image is missing we fall back to a placeholder title card.
+
+Each segment runs for max(visual, narration) so nothing gets cut; the science
+clips freeze their last frame if the narration runs longer. Everything is
+normalized to 1280x720 / 30fps / AAC and concatenated into video/rough_cut.mp4.
+
+Usage:  python video/rough_cut.py
+Prereqs: run video/voiceover.py first (needs the <key>.mp3 files).
+"""
+import os
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+import textwrap
+
+ROOT = Path(__file__).resolve().parents[1]
+WORK = ROOT / "video" / "_rough"
+WORK.mkdir(parents=True, exist_ok=True)
+os.environ.setdefault("MPLCONFIGDIR", str(WORK / ".mpl"))   # keep font cache in-repo
+
+import matplotlib                                            # noqa: E402
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt                              # noqa: E402
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from voiceover import SCENES                                 # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parent / "manim"))
+from _sync import cue                                        # noqa: E402
+
+VO = ROOT / "video" / "assets" / "vo"
+COMIC = ROOT / "video" / "assets" / "comic"
+OUT = ROOT / "video" / "rough_cut.mp4"
+
+NAVY = "#0d1b2a"
+TEAL = "#2ec4b6"
+ORANGE = "#ff9f1c"
+CREAM = "#f7f3e3"
+MUTED = "#8d99ae"
+W, H, FPS = 1280, 720, 30
+
+
+def clip(name, scene=None):
+    scene = scene or "".join(p.capitalize() for p in name.split("_"))
+    return ROOT / "media" / "videos" / name / "720p30" / (scene + ".mp4")
+
+
+# A panel payload is a dict:
+#   shots: list of (filename, motion) played in order. motion is one of
+#          push_in | pull_out | punch | drift.
+#   cuts:  optional list of (phrase, offset_s); cut to the next shot at
+#          cue(phrase)+offset. Needs len(cuts) == len(shots)-1. Omit for a
+#          single-shot panel (it just gets a Ken-Burns move across the scene).
+def panel(shots, cuts=None):
+    return {"shots": shots, "cuts": cuts or []}
+
+
+# storyboard order; (scene-key or None, kind, payload, kicker, title)
+SEGMENTS = [
+    (None, "card", None, "ROUGH CUT  \u2022  scratch AI narration",
+     "The Day the Sky Exploded Over Massachusetts"),
+    ("scene1", "panel",
+     panel([("scene1a.png", "push_in"), ("scene1b.png", "punch")],
+           cuts=[("boom", -0.05)]),  # snap to the pause before "boom", land on word
+     "SCENE 1  \u2014  COMIC", "The thud"),
+    ("scene2", "panel",
+     panel([("scene2a.png", "push_in"), ("scene2b.png", "push_in")],
+           cuts=[("Then you check", 0.0)]),  # street -> cut to the phone
+     "SCENE 2  \u2014  COMIC", "Bigger than your house"),
+    ("scene3", "panel", panel([("scene3.png", "pull_out")]),
+     "SCENE 3  \u2014  COMIC", "The clue in what didn't happen"),
+    ("scene4", "panel",
+     panel([("scene4a.png", "push_in"), ("scene4b.png", "push_in")],
+           cuts=[("meteor", 0.0)]),  # overcast sky -> cut on "meteor" reveal
+     "SCENE 4  \u2014  COMIC", "It came from space"),
+    ("scene5", "clip", [clip("the_work")], "SCENE 5  \u2014  MANIM",
+     "Not magic: public data + code"),
+    ("scene6", "clip", [clip("sightings_map")], "SCENE 6  \u2014  MANIM",
+     "Seen 400 miles away \u2014 but not here"),
+    ("scene7", "clip", [clip("flash_to_boom")], "SCENE 7  \u2014  MANIM",
+     "Light is fast, sound is slow"),
+    ("scene8", "clip", [clip("triangulation")], "SCENE 8  \u2014  MANIM",
+     "Finding it with sound"),
+    ("scene9", "clip", [clip("tnt_meter")], "SCENE 9  \u2014  MANIM (reworked)",
+     "How big? The boom is a scale"),
+    ("scene10a", "clip", [clip("southern_mystery", "MysteryWhy")],
+     "SCENE 10a  \u2014  MANIM", "A puzzle: why all south?"),
+    ("scene10b", "clip", [clip("southern_mystery", "MysteryPopulation")],
+     "SCENE 10b  \u2014  MANIM", "Not just population"),
+    ("scene10c1", "clip", [clip("southern_mystery", "MysteryWindsTheory")],
+     "SCENE 10c  \u2014  MANIM", "Wind-lens theory"),
+    ("scene10c2", "clip", [clip("southern_mystery", "MysteryWindsWrong")],
+     "SCENE 10c  \u2014  MANIM", "Theory wrong"),
+    ("scene11", "panel", panel([("scene11.png", "push_in")]),
+     "SCENE 11  \u2014  COMIC", "Your turn"),
+]
+
+
+def ffprobe_dur(p):
+    out = subprocess.check_output([
+        "ffprobe", "-v", "error", "-show_entries", "format=duration",
+        "-of", "default=nk=1:nw=1", str(p)])
+    return float(out.strip())
+
+
+def run(cmd):
+    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL,
+                   stderr=subprocess.PIPE)
+
+
+def make_card(path, kicker, title, body):
+    fig = plt.figure(figsize=(W / 100, H / 100), dpi=100)
+    fig.patch.set_facecolor(NAVY)
+    ax = fig.add_axes([0, 0, 1, 1]); ax.axis("off"); ax.set_facecolor(NAVY)
+    ax.text(0.5, 0.84, kicker, ha="center", va="center", color=ORANGE,
+            fontsize=18, fontweight="bold", transform=ax.transAxes)
+    ax.text(0.5, 0.70, "\n".join(textwrap.wrap(title, 34)), ha="center",
+            va="center", color=CREAM, fontsize=32, fontweight="bold",
+            transform=ax.transAxes)
+    if body:
+        ax.text(0.5, 0.40, "\n".join(textwrap.wrap(body, 60)), ha="center",
+                va="center", color="#c9d2de", fontsize=17,
+                transform=ax.transAxes, linespacing=1.5)
+    fig.savefig(path, facecolor=NAVY); plt.close(fig)
+
+
+VF_FIT = (f"scale={W}:{H}:force_original_aspect_ratio=decrease,"
+          f"pad={W}:{H}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps={FPS}")
+# full-bleed: scale up to cover the frame, then center-crop (no distortion)
+VF_COVER = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
+            f"crop={W}:{H},setsar=1,fps={FPS}")
+
+
+def seg_from_image(idx, img, vo, dur, vf=f"scale={W}:{H},setsar=1,fps={FPS}"):
+    out = WORK / f"seg{idx:02d}.mp4"
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", str(img)]
+    if vo:
+        cmd += ["-i", str(vo)]
+    else:
+        cmd += ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
+    cmd += ["-filter_complex",
+            f"[0:v]{vf}[v];[1:a]aresample=44100,apad[a]",
+            "-map", "[v]", "-map", "[a]", "-t", f"{dur:.3f}",
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", str(FPS),
+            "-c:a", "aac", "-ar", "44100", "-ac", "2", "-b:a", "128k", str(out)]
+    run(cmd)
+    return out
+
+
+def normalize_clip(path, dst):
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-an",
+         "-vf", VF_FIT, "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", str(FPS),
+         str(dst)])
+    return dst
+
+
+def concat_videos(idx, clips):
+    if len(clips) == 1:
+        return normalize_clip(clips[0], WORK / f"vis{idx:02d}.mp4")
+    parts = []
+    for j, c in enumerate(clips):
+        parts.append(normalize_clip(c, WORK / f"vis{idx:02d}_{j}.mp4"))
+    lst = WORK / f"vis{idx:02d}.txt"
+    lst.write_text("".join(f"file '{p}'\n" for p in parts))
+    out = WORK / f"vis{idx:02d}.mp4"
+    run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+         "-i", str(lst), "-c", "copy", str(out)])
+    return out
+
+
+def seg_from_clip(idx, vis, vo, dur):
+    out = WORK / f"seg{idx:02d}.mp4"
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(vis), "-i", str(vo),
+         "-filter_complex",
+         f"[0:v]tpad=stop_mode=clone:stop_duration=3600[v];"
+         f"[1:a]aresample=44100,apad[a]",
+         "-map", "[v]", "-map", "[a]", "-t", f"{dur:.3f}",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", str(FPS),
+         "-c:a", "aac", "-ar", "44100", "-ac", "2", "-b:a", "128k", str(out)])
+    return out
+
+
+# --- comic-panel motion (Ken Burns) -----------------------------------------
+# Render the move on a big (4K-ish) canvas: zoompan steps the crop origin in
+# whole pixels, so on a 3x canvas a 1px step is ~1/3px after downscale -> the
+# glide reads smooth instead of a 1px stutter ("shake"). ZOOM is the push/pull
+# amount; bump it for a more deliberate, cinematic move.
+UPSCALE = 3
+ZOOM = 0.18
+
+
+def _zoom_expr(motion, n):
+    """zoompan z-expression over n output frames (variable `on` = 0..n-1)."""
+    d = max(1, n - 1)
+    if motion == "push_in":
+        return f"1.0+{ZOOM}*on/{d}"
+    if motion == "pull_out":
+        return f"{1.0 + ZOOM}-{ZOOM}*on/{d}"
+    if motion == "punch":          # snap in, then ease out to rest (a recoil)
+        return f"1.0+0.16*pow(1-on/{d},2)"
+    return f"1.0+0.03*on/{d}"      # "drift" — barely-there life
+
+
+_sil_cache = {}
+
+
+def _silence_ends(key):
+    """End-times of silent gaps in a scene's VO (onsets of the next word)."""
+    if key in _sil_cache:
+        return _sil_cache[key]
+    p = VO / f"{key}.mp3"
+    ends = []
+    if p.exists():
+        res = subprocess.run(
+            ["ffmpeg", "-hide_banner", "-nostats", "-i", str(p),
+             "-af", "silencedetect=noise=-32dB:d=0.25", "-f", "null", "-"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+        txt = res.stderr.decode("utf-8", "ignore")
+        ends = [float(m) for m in re.findall(r"silence_end:\s*([0-9.]+)", txt)]
+    _sil_cache[key] = ends
+    return ends
+
+
+def _snap_to_silence(key, approx, tol=1.3):
+    """Nudge a char-proportional cue onto the nearest real pause (the dramatic
+    beat before the next word), so cuts land on the word even with pauses."""
+    cands = [e for e in _silence_ends(key) if abs(e - approx) <= tol]
+    return min(cands, key=lambda e: abs(e - approx)) if cands else approx
+
+
+def motion_clip(out, img, dur, motion):
+    n = max(2, int(round(dur * FPS)))
+    z = _zoom_expr(motion, n)
+    base = (f"scale={UPSCALE * W}:{UPSCALE * H}:force_original_aspect_ratio="
+            f"increase,crop={UPSCALE * W}:{UPSCALE * H},setsar=1")
+    zp = (f"zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':"
+          f"d={n}:s={W}x{H}:fps={FPS}")
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(img),
+         "-vf", f"{base},{zp},format=yuv420p", "-frames:v", str(n), "-an",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", str(FPS), str(out)])
+    return out
+
+
+def build_panel(idx, key, spec, vo, dur):
+    """Render a comic panel (one or more motion shots) and mux the VO."""
+    shots = spec["shots"]
+    if len(shots) == 1:
+        vis = motion_clip(WORK / f"vis{idx:02d}.mp4", COMIC / shots[0][0],
+                          dur, shots[0][1])
+        return seg_from_clip(idx, vis, vo, dur)
+
+    # multi-shot: cut to the next shot at cue(phrase)+offset (even split if the
+    # cue can't be located).
+    edges = [0.0]
+    for j, (phrase, off) in enumerate(spec["cuts"]):
+        t = cue(key, phrase)
+        if t is not None:
+            t = _snap_to_silence(key, t) + off
+        else:
+            t = dur * (j + 1) / len(shots)
+        edges.append(min(max(t, edges[-1] + 0.3), dur - 0.3))
+    edges.append(dur)
+
+    parts = []
+    for j, (fname, motion) in enumerate(shots):
+        sub = max(0.3, edges[j + 1] - edges[j])
+        parts.append(motion_clip(WORK / f"pan{idx:02d}_{j}.mp4",
+                                 COMIC / fname, sub, motion))
+    lst = WORK / f"vis{idx:02d}.txt"
+    lst.write_text("".join(f"file '{p}'\n" for p in parts))
+    vis = WORK / f"vis{idx:02d}.mp4"
+    run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+         "-i", str(lst), "-c", "copy", str(vis)])
+    return seg_from_clip(idx, vis, vo, dur)
+
+
+def main():
+    segs = []
+    total = 0.0
+    for idx, (key, kind, payload, kicker, title) in enumerate(SEGMENTS):
+        vo = VO / f"{key}.mp3" if key else None
+        vo_dur = ffprobe_dur(vo) if vo and vo.exists() else 0.0
+
+        have_imgs = (kind == "panel" and payload and
+                     all((COMIC / s[0]).exists() for s in payload["shots"]))
+        if have_imgs:
+            dur = (vo_dur + 0.8) if vo else 4.0
+            seg = build_panel(idx, key, payload, vo, dur)
+        elif kind in ("card", "panel"):
+            body = SCENES.get(key, "") if key else (
+                "Real Manim science shots in scenes 5-10.  Comic panels in "
+                "scenes 1-4 & 11.  AI scratch narration for timing.")
+            img = WORK / f"card{idx:02d}.png"
+            make_card(img, kicker, title, body)
+            dur = (vo_dur + 0.6) if vo else 3.0
+            seg = seg_from_image(idx, img, vo, dur)
+        else:
+            vis = concat_videos(idx, payload)
+            vis_dur = ffprobe_dur(vis)
+            dur = max(vis_dur, vo_dur) + 0.4
+            seg = seg_from_clip(idx, vis, vo, dur)
+
+        segs.append(seg)
+        total += dur
+        print(f"  seg{idx:02d}  {kind:5s}  {title[:34]:34s}  {dur:5.1f}s")
+
+    lst = WORK / "concat.txt"
+    lst.write_text("".join(f"file '{s}'\n" for s in segs))
+    run(["ffmpeg", "-y", "-loglevel", "error", "-fflags", "+genpts",
+         "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(OUT)])
+    print(f"\nrough cut: {OUT.relative_to(ROOT)}  (~{total:.0f}s, {total/60:.1f} min)")
+
+
+if __name__ == "__main__":
+    main()
