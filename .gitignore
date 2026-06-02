@@ -22,10 +22,15 @@ data/dyfi/
 *.mseed
 *.msd
 
-# media
+# media / build outputs — regenerable from code, so NOT tracked.
+# media/ = Manim renders (rebuild: manim ...); video/*.mp4 = rough_cut.py output;
+# video/_rough/ = scratch assembly dir; vo/auditions/ = throwaway auditions.
 media/
 video/*.mp4
 video/*.mp4.part*
-video/assets/
 video/_rough/
 video/manim/previews/
+video/assets/vo/auditions/
+
+# Non-reproducible generated source assets ARE tracked, via Git LFS
+# (see .gitattributes): video/assets/comic/*.png  +  video/assets/vo/*.mp3
