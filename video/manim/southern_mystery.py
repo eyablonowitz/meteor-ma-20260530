@@ -19,6 +19,11 @@ Render:
 """
 from manim import *
 import numpy as np
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+from _sync import cue, vo_duration
 
 NAVY = "#0d1b2a"
 TEAL = "#2ec4b6"
@@ -109,13 +114,35 @@ class MysteryWhy(Scene):
 
 
 class MysteryPopulation(Scene):
-    """scene10b -- the matched-pair check (not just population)."""
+    """scene10b -- the matched-pair check, unfolded in step with the narration."""
+
+    def _play(self, *a, run_time=1.0, **k):
+        self.play(*a, run_time=run_time, **k)
+        self._t += run_time
+
+    def _wait(self, dt):
+        if dt and dt > 0.04:
+            self.wait(dt)
+            self._t += dt
+
+    def _hold_until(self, t):
+        if t is not None:
+            self._wait(t - self._t)
 
     def construct(self):
         self.camera.background_color = NAVY
+        self._t = 0.0
+        C = {
+            "lined": cue("scene10b", "We lined up towns", lead=0.15),
+            "manch": cue("scene10b", "Manchester", lead=0.1),
+            "lowell": cue("scene10b", "Lowell", lead=0.1),
+            "concl": cue("scene10b", "wasn't only about population", lead=0.15),
+        }
+        END = vo_duration("scene10b")
+
         sub = pop("first guess: just more people down south?", MUTED,
                   0.42).to_edge(UP, buff=0.4)
-        self.play(FadeIn(sub))
+        self._play(FadeIn(sub), run_time=0.6)
 
         axis = DashedLine([0, 2.7, 0], [0, -3.0, 0], color=MUTED, stroke_width=2)
         bsrc = star([0, 0.2, 0], r=0.24)
@@ -138,16 +165,29 @@ class MysteryPopulation(Scene):
                           stroke_width=3, tip_length=0.16)
         d_s_lbl = pop("~35 km", MUTED, 0.3).next_to(d_s, RIGHT, buff=0.1)
 
-        self.play(Create(axis), GrowFromCenter(bsrc), FadeIn(bsrc_lbl))
-        self.play(FadeIn(n_house), FadeIn(n_txt), GrowArrow(d_n), FadeIn(d_n_lbl),
-                  FadeIn(s_house), FadeIn(s_txt), GrowArrow(d_s), FadeIn(d_s_lbl))
-        self.wait(0.5)
-        self.play(FadeIn(n_num, scale=1.3), FadeIn(n_rep),
-                  FadeIn(s_num, scale=1.3), FadeIn(s_rep))
+        # "we lined up towns of the same size, the same distance away"
+        self._hold_until(C["lined"])
+        self._play(Create(axis), GrowFromCenter(bsrc), FadeIn(bsrc_lbl),
+                   run_time=0.6)
+        self._play(FadeIn(n_house), FadeIn(n_txt), GrowArrow(d_n),
+                   FadeIn(d_n_lbl), FadeIn(s_house), FadeIn(s_txt),
+                   GrowArrow(d_s), FadeIn(d_s_lbl), run_time=0.9)
+
+        # "Manchester, New Hampshire, to the north: zero reports"
+        self._hold_until(C["manch"])
+        self._play(FadeIn(n_num, scale=1.3), FadeIn(n_rep), run_time=0.6)
+
+        # "Lowell, Massachusetts, to the south: eight"
+        self._hold_until(C["lowell"])
+        self._play(FadeIn(s_num, scale=1.3), FadeIn(s_rep), run_time=0.6)
+
+        # "so it wasn't only about population"
+        self._hold_until(C["concl"])
         cap = pop("same size \u2022 same distance \u2192 not just population",
                   TEAL, 0.46).to_edge(DOWN, buff=0.4)
-        self.play(FadeIn(cap))
-        self.wait(3.0)
+        self._play(FadeIn(cap), run_time=0.6)
+        self._hold_until(END)
+        self.wait(0.3)
 
 
 class MysteryWindsTheory(Scene):

@@ -144,7 +144,19 @@ class TntMeter(Scene):
             return pop(f"\u2248 {int(round(tons.get_value()))} t", ORANGE,
                        0.6).move_to(C + np.array([0, 1.05, 0]))
         rd = always_redraw(readout)
-        self.add(ndl, rd)
+
+        # a live waveform that stretches high -> low pitch as the needle climbs,
+        # so you SEE the note deepen in lock-step with the energy reading
+        def _k():
+            return 9.0 + (2.1 - 9.0) * min(1.0, tons.get_value() / ANSWER)
+        live = always_redraw(lambda: FunctionGraph(
+            lambda x: 0.7 * math.exp(-(x / 3.2) ** 2) * math.cos(_k() * x),
+            x_range=[-4.6, 4.6, 0.01], color=ORANGE).set_stroke(width=4)
+            .move_to([0, 2.45, 0]))
+        wlbl = pop("the note deepens as the needle climbs", MUTED,
+                   0.42).move_to([0, 3.45, 0])
+        self.add(ndl, rd, live)
+        self.play(FadeIn(wlbl), run_time=0.6)
         self.play(tons.animate.set_value(ANSWER), run_time=4.0,
                   rate_func=rate_functions.ease_out_cubic)
         self.play(Indicate(ndl, scale_factor=1.05, color=ORANGE), run_time=0.6)
@@ -152,7 +164,8 @@ class TntMeter(Scene):
         ans = pop("a couple hundred tons of TNT", CREAM, 0.56).to_edge(DOWN, buff=0.5)
         self.play(FadeIn(ans, scale=1.1))
         self.wait(3.8)
-        self.play(*[FadeOut(m) for m in (arc, ticks, unit, hub, ndl, rd, ans)])
+        self.play(*[FadeOut(m) for m in
+                    (arc, ticks, unit, hub, ndl, rd, ans, live, wlbl)])
 
         # ---- Panel 4: feel it -> a few hundred lightning bolts, all at once ----
         positions = [(-5.0, 1.5, 0.6), (-3.9, 2.1, 0.5), (-2.7, 1.3, 0.72),

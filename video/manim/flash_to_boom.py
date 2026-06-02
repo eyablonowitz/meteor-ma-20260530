@@ -55,7 +55,7 @@ class FlashToBoom(Scene):
         town_dist = float(np.linalg.norm(T - S))
 
         C = {
-            "seen": cue("scene7", "But many people heard the boom", lead=0.1),
+            "seen": cue("scene7", "But you heard the boom", lead=0.1),
             "light": cue("scene7", "Light travels at about", lead=0.2),
             "sound": cue("scene7", "But sound is slow", lead=0.1),
             "lightning": cue("scene7", "That's why you see lightning",

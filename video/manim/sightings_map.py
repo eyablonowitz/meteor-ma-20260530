@@ -87,11 +87,11 @@ class SightingsMap(Scene):
 
         C = {
             "ams": cue("scene6", "The American Meteor Society", lead=0.15),
-            "balt": cue("scene6", "In Baltimore", lead=0.15),
+            "balt": cue("scene6", "Baltimore", lead=0.15),
             "tally": cue("scene6", "Reports came in from nine states", lead=0.15),
             "cloud": cue("scene6", "But here, in eastern Massachusetts", lead=0.2),
             "over": cue("scene6", "The people who could see it", lead=0.2),
-            "clue": cue("scene6", "You get a clue", lead=0.2),
+            "clue": cue("scene6", "The sightings are helpful", lead=0.2),
         }
         END = vo_duration("scene6")
 
@@ -148,7 +148,7 @@ class SightingsMap(Scene):
         # --- beat 3: Baltimore near the ring edge (no moon icon) ---
         bmore = dots["MD"][0]
         callout = pop("Baltimore, MD\n~400 mi \u2014 brighter than\n"
-                      "the full Moon (in daylight!)", ORANGE, 0.38)
+                      "the full Moon", ORANGE, 0.38)
         panel = RoundedRectangle(corner_radius=0.12, width=callout.width + 0.4,
                                  height=callout.height + 0.3, fill_color=NAVY,
                                  fill_opacity=0.92, stroke_color=ORANGE,
@@ -160,8 +160,8 @@ class SightingsMap(Scene):
 
         # --- beat 4: 9 states + 2 provinces (+ dashcams) ---
         self._hold_until(C["tally"])
-        tally = pop("9 states  \u2022  2 Canadian provinces  \u2022  "
-                    "some caught on dashcam", TEAL, 0.4).to_edge(DOWN, buff=0.35)
+        tally = pop("9 states  \u2022  2 Canadian provinces", TEAL,
+                    0.4).to_edge(DOWN, buff=0.35)
         self._play(FadeIn(tally), run_time=0.6)
         self._play(LaggedStart(*[Indicate(dots[ab][0], color=ORANGE,
                                           scale_factor=1.5) for ab in dots],
@@ -178,16 +178,82 @@ class SightingsMap(Scene):
                    src.animate.set_opacity(0.25), run_time=0.6)
         self._play(FadeIn(cl, shift=DOWN * 0.3), FadeIn(cl_lbl), run_time=0.8)
 
-        # --- beat 6: the ones far enough away saw OVER the clouds ---
+        # --- beat 6: side-view cutaway -- distant viewers saw OVER the cloud ---
         self._hold_until(C["over"])
-        over = pop("far enough away? you could see OVER the clouds",
-                   CREAM, 0.4).to_edge(DOWN, buff=0.5)
-        self._play(FadeIn(over), run_time=0.6)
+        map_grp = VGroup(ring, ring_lbl, ocean, coast, src, cl, cl_lbl,
+                         *dots.values())
+        self._play(FadeOut(map_grp), run_time=0.5)
 
-        # --- beat 7: the clue ---
+        title = pop("side view: why distance let people see it", MUTED,
+                    0.4).to_edge(UP, buff=0.4)
+        ground = Line([-6.2, -2.6, 0], [6.2, -2.6, 0], color=MUTED, stroke_width=3)
+        band = VGroup(*[Circle(r).set_fill(CLOUD, 1).set_stroke(width=0)
+                        .move_to([cx, cy, 0]) for (cx, cy, r) in
+                        [(-1.5, -0.7, 0.5), (-0.8, -0.5, 0.6), (0, -0.45, 0.66),
+                         (0.8, -0.5, 0.6), (1.5, -0.7, 0.5)]])
+        band_lbl = pop("cloud deck over MA", MUTED, 0.32).next_to(
+            band, UP, buff=0.06)
+        blast = Star(n=8, outer_radius=0.3, color=ORANGE, fill_opacity=1,
+                     stroke_color=CREAM, stroke_width=2).move_to([0, 2.4, 0])
+        blast_lbl = pop("the fireball, miles up", ORANGE, 0.36).next_to(
+            blast, UP, buff=0.08)
+
+        # local viewer (right below) -- sightline blocked by the cloud
+        v1 = Dot([0, -2.45, 0], radius=0.1, color=CREAM)
+        v1_lbl = pop("right below", CREAM, 0.32).next_to(v1, DOWN, buff=0.07)
+        block = DashedLine([0, -2.3, 0], [0, -1.15, 0], color=RED, stroke_width=4)
+        x1 = VGroup(
+            Line([-0.18, -0.98, 0], [0.18, -0.62, 0], color=RED, stroke_width=6),
+            Line([-0.18, -0.62, 0], [0.18, -0.98, 0], color=RED, stroke_width=6))
+
+        # distant viewer -- sightline clears the cloud, straight to the blast
+        v2 = Dot([4.8, -2.45, 0], radius=0.1, color=CREAM)
+        v2_lbl = pop("miles away", CREAM, 0.32).next_to(v2, DOWN, buff=0.07)
+        sight = Line([4.8, -2.3, 0], [0.2, 2.15, 0], color=TEAL, stroke_width=4)
+
+        over = pop("far enough away, your line of sight clears the cloud",
+                   CREAM, 0.42).to_edge(DOWN, buff=0.35)
+        self._play(FadeIn(title), Create(ground), FadeIn(band), FadeIn(band_lbl),
+                   GrowFromCenter(blast), FadeIn(blast_lbl), run_time=0.8)
+        self._play(FadeIn(v1), FadeIn(v1_lbl), Create(block), Create(x1),
+                   run_time=0.7)
+        self._play(FadeIn(v2), FadeIn(v2_lbl), Create(sight), FadeIn(over),
+                   run_time=0.8)
+        cutaway = VGroup(title, ground, band, band_lbl, blast, blast_lbl,
+                         v1, v1_lbl, block, x1, v2, v2_lbl, sight)
+
+        # --- beat 7: eyewitness lines are imprecise -> we need objective data ---
+        # scattered observers all point toward MA, but their sight-lines cross in
+        # a fuzzy zone, not a single point -> subjective data can't pin the source.
         self._hold_until(C["clue"])
-        clue = pop("clue: the meteor was over NE Massachusetts \u2014 "
-                   "but we can do better", ORANGE, 0.4).to_edge(DOWN, buff=0.5)
-        self._play(FadeOut(over), FadeIn(clue), run_time=0.6)
+        self._play(FadeOut(cutaway), FadeOut(over), run_time=0.5)
+
+        ma_lbl = pop("everyone looks toward Massachusetts\u2026", MUTED,
+                     0.4).to_edge(UP, buff=0.45)
+        obs = [(-5.2, -1.2), (-4.3, -2.7), (-2.5, -3.0), (-0.7, -2.7),
+               (1.3, -3.0), (3.1, -2.4), (4.9, -1.0), (-5.4, 0.7)]
+        jit = [(-0.9, 0.5), (0.8, -0.5), (-0.5, 0.8), (0.7, 0.5),
+               (-0.8, -0.4), (0.95, 0.15), (-0.6, 0.65), (0.6, -0.6)]
+        tgt = np.array([0.3, 1.5, 0])
+        people, rays = VGroup(), VGroup()
+        for (px, py), (jx, jy) in zip(obs, jit):
+            p = np.array([px, py, 0])
+            people.add(Dot(p, radius=0.09, color=TEAL))
+            rays.add(DashedLine(p, tgt + np.array([jx, jy, 0]), color=TEAL,
+                                stroke_width=2, dash_length=0.12).set_opacity(0.6))
+
+        fuzzy = Ellipse(width=2.3, height=1.6, color=ORANGE,
+                        stroke_width=3).set_stroke(opacity=0.9).move_to(tgt)
+        fuzzy_lbl = pop("they cross in a fuzzy zone \u2014\nnot a single point",
+                        ORANGE, 0.36).next_to(fuzzy, RIGHT, buff=0.35)
+        cap = pop("eyewitness lines don't quite meet \u2014 we need objective data",
+                  CREAM, 0.42).to_edge(DOWN, buff=0.4)
+
+        self._play(FadeIn(ma_lbl),
+                   LaggedStart(*[GrowFromCenter(pp) for pp in people],
+                               lag_ratio=0.08), run_time=0.8)
+        self._play(LaggedStart(*[Create(r) for r in rays], lag_ratio=0.06),
+                   run_time=1.1)
+        self._play(Create(fuzzy), FadeIn(fuzzy_lbl), FadeIn(cap), run_time=0.7)
         self._hold_until(END)
         self.wait(0.3)

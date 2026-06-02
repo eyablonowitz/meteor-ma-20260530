@@ -25,45 +25,43 @@ jagged **"BOOM"**; window lines buzz; a picture frame tilts.
 > **Boom.** A deep, double *crack* you feel in your chest. The windows rattle.
 > The floor jumps.
 >
-> Your first thought: *did a tree just hit the house? Did something explode in the basement?*
+> Your first thought: *did a tree just hit the house?*
 
-## SCENE 2 — It's bigger than your house (~0:20)
+## SCENE 2 — It's bigger than your house
 
 **[VISUAL]** COMIC: the teen on the porch; neighbors point in different
 directions; a distant siren as a sound-ribbon; phone filling with pinned posts.
 
-> You go outside and see your neighbors on the street too. You're all asking: *Did a transformer blow? A boiler?*
-> Someone says they heard sirens, a mile away.
+> You go outside and see your neighbors on the street too. You're all asking: "did you feel it?"  Someone says they heard sirens, a mile away.
 >
-> Then you check your social media on your phone. It's not just your street. People felt it **ten, twenty, thirty miles away** — in every direction. People who listen to firefighter and police  radios say they don't know what happened either.
+> You check social media. It's not just your street. People are talking about a boom in towns that are **miles and miles away**.
 >
-> And that's when it stops being exciting… and starts being scary. *A gas explosion? An attack? Is anyone hurt?*
+> This is getting scary. *Did something big just blow up? Are people hurt?*
 
-## SCENE 3 — The clue hidden in what *didn't* happen (~0:45)
+## SCENE 3 — The clue hidden in what *didn't* happen
 
 **[VISUAL]** COMIC: a map of felt-pins everywhere, a magnifier finds **no** fire,
 **no** rubble. A lightbulb.
 
-> But minutes pass. And something doesn't add up. With *that* many people shaken,
-> across *that* huge an area — **nobody reports any real damage.** No fire. No
-> rubble. No injuries.
->
-> A blast that big, but that gentle on the ground, can only mean one thing.
-> Whatever exploded didn't go off *near* anyone. It went off **high above everyone.**
+> But as minutes pass,  something doesn't add up. With *that* many people shaken,  
+> across *that* huge an area — **somebody** should be reporting from near the source. Seeing real damage.
+> 
+> But so far...nothing.
 
-## SCENE 4 — It came from space (~1:10)
+## SCENE 4 — It came from space
 
-**[VISUAL]** COMIC: clouds part to reveal a streaking fireball; title slams in:
+**[VISUAL]** COMIC: teen looking up at clouds. Pan above the clouds to reveal a streaking fireball
 **"A METEOR."**
 
-> The sky exploded. A chunk of rock from space — a **meteor** — slammed into the
-> atmosphere and blew apart, miles up.
+> A new hypothesis enters your head. And the fear begins to fade.
 >
-> And once the fear fades, a better feeling takes over. **Curiosity.** *Where exactly did the meteor explode? And how big was the explosion?*
+> Could it have been... **a meteor**? Exploding high up in the sky unseen?
+> 
+> And now a new feeling takes over: **Curiosity.** *Where exactly did the meteor explode? And how big was the explosion?*
 >
 > And you realize: you can actually try to *answer* those questions yourself.
 
-## SCENE 5 — Not magic: public data + code (~1:35)
+## SCENE 5 — Not magic: public data + code
 
 **[VISUAL]** MANIM (`the_work.py`): a stylized code window types a few Python
 lines; arrows pull data from labeled databases (USGS quakes, GOES satellite,
@@ -78,27 +76,26 @@ seismic network, fireball reports) into a table, then into little maps/charts.
 ## SCENE 6 — Seen 400 miles away, but not here
 
 **[VISUAL]** MANIM (`sightings_map.py`): NE-US map; a ~400 mi ring; sighting dots
-pop across 9 states + 2 provinces; Baltimore on the ring edge; a cloud over MA.
+pop across 9 states + 2 provinces; Baltimore on the ring edge; a cloud over MA.  
+<Possible to add some 3d effect here so we can illustrate people seeing "over the cloud"?>
 
-> The first question you ask is: **where did the meteor explode?** 
+> You start with **where**.
 
-> The American Meteor Society collects data on big meteor fireball sightings.  
-> In Baltimore, people watched a fireball **brighter than the full Moon** in broad daylight. Reports came in from **nine states, and two Canadian provinces.** Some folks
-> even caught it on their dashcams.
+> The American Meteor Society collects data on big meteor sightings.  
+> As far south as Baltimore, people saw a fireball **brighter than the full Moon**. Reports came in from **nine states, and two Canadian provinces.**
 >
 > But here, in eastern Massachusetts — right underneath it? **Clouds.** We
 > *heard* the sky explode… but we couldn't *see* a thing. The people who could
 > see it were the ones far enough away to look *over* the clouds.
 
-> You get a clue from these reports that  the meteor was probably over northeastern Massachusetts when it was seen. But you can do better.
+> The sightings are helpful. But what you really need is objective data.
 
 ## SCENE 7 — Light is fast, sound is slow
 
 **[VISUAL]** MANIM (`flash_to_boom.py`): flash at 2:06; slow expanding sound ring +
 ticking clock; reaches a town at ~2:11 → BOOM.
 
-> The visual reports of the fireball cluster around **2:06 PM Eastern time.** But many people *heard*
-> the boom around **2:11** — five minutes later.
+> Intriguingly, the reported sightings were at **2:06PM**. But you *heard* the boom at **2:11** — five minutes later.
 
 > That's not a mistake. Light travels at about 186,000 miles per second -  effectively instantaneous to our senses. But **sound is slow**.  It takes seconds or minutes to cover distances we  see in everyday life. That's why you see lightning before you hear the thunder.
 
@@ -122,7 +119,7 @@ circles triangulate back to a glowing X over NE MA / SE NH.
 
 **[VISUAL]** MANIM (`tnt_meter.py`, **redesigned**): a boom waveform draws in; we
 highlight one slow ~2-second oscillation ("the note"); a dial/scale swings to
-**≈ a couple hundred tons of TNT**; then an analogy panel — a cluster of
+**≈ a couple hundred tons of TNT** as we illustrate a waveform decreasing in frequency to match; then an analogy panel — a cluster of
 **lightning bolts** all flash at once. *(No light-vs-sound gauges. No double-boom.)*
 
 > So — how big was it? The boom *itself* tells you.
@@ -147,7 +144,7 @@ voice):
 
 - **10a** `MysteryWhy` — felt-dots cluster south, sparse north, a big "?".
 - **10b** `MysteryPopulation` — matched pair Manchester NH = 0 vs Lowell MA = 8
-(same size/distance) → "not just population".
+(same size/distance) → "not just population". <the illustration progressively unfolds to match the narration>
 - **10c-1** `MysteryWindsTheory` — the wind-lens "theory" + "pulling the real
 wind data."
 - **10c-2** `MysteryWindsWrong` — the real winds blow sideways → the theory gets
@@ -175,7 +172,7 @@ a red ✗ "WRONG." *(No "how science moves" coda — Scene 11 closes that.)*
 End card: **"The data is public. What will you ask?"** + links.
 
 > But being wrong isn't failing.
-> It's how we know there is more to learn. There's a real, **open question** here. One that
+> It's how we know there is more to learn. There's a real, open question here — one that
 > *you* could help answer.
 > Ready to get started?
 
@@ -184,10 +181,10 @@ End card: **"The data is public. What will you ask?"** + links.
 ### Notes for production
 
 - Keep panels **stylized and obviously illustrated** — no fake "news footage."
-- The emotional hook for this audience: **"our theory was wrong — that's science"**
+- The emotional hook for this audience: **"our theory was wrong, but that's ok"**
 (Scene 10). Give it room. (We dropped the earlier "you are the data" beat; the
 sensor-network story carries Scene 8 now.)
 - Scenes 5 and 10 are the "how the work really happens" beats — process over
 results.
-- Slower delivery (~0.9) + the added pauses are deliberate; don't rush the cut.
+- Delivery now at **1.0** (natural pace); the added pauses still carry the beats.
 

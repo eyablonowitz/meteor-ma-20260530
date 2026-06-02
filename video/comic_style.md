@@ -100,8 +100,11 @@ wonder/awe (lit from above) → determined/curious (at the laptop).
   - **S2** `scene2a` **push-in** (street) → cut on "Then you check" → `scene2b`
     **push-in** (phone close-up, pins flooding);
   - **S3** **pull-out** to reveal the (focused) felt-cluster;
-  - **S4** `scene4a` **push-in** (overcast) → cut on "meteor" → `scene4b`
-    **push-in** (fireball);
+  - **S4** `scene4_pan` **vertical pan-reveal** — one *tall* panel; the camera
+    pans **up** from the ground through the clouds to the fireball on "meteor"
+    (uses `pan_clip()`, not the `zoompan` Ken-Burns move) → **hard cut on
+    "Curiosity"** to `scene4_react` (push-in), a close-up of curious, orange-lit
+    Alex with floating **?** doodles;
   - **S11** push-in on the laptop.
 - **Multi-shot panels & cut-on-cue:** a panel can list several shots that
   hard-cut on a narration cue. The cut time comes from `_sync.cue()` (char-
@@ -159,7 +162,7 @@ on the word "boom".
 *(Legacy single-image `scene1.png` is kept as the source for `scene1b.png`.)*
 
 ### Scene 2 — Bigger than your house  → split: `scene2a.png` + `scene2b.png`
-Cut from **a** → **b** on "Then you check…".
+Cut from **a** → **b** on "You check social media…".
 - **2a (street):** exterior suburban MA street, flat overcast sky. Alex on the
   sidewalk among neighbors who all **look up / around**, confused — "did you
   hear that too?". **No phone in frame.** Faint teal sound-ribbon. → **push-in**.
@@ -177,16 +180,23 @@ finds **no fire, no rubble, no injuries** (red circle-slash icons); one orange
 **thought-bulb** cues the insight. Calm, analytical. Navy base, cream map, slate
 land, teal pins. → **pull-out** reveal.
 
-### Scene 4 — It came from space  → split: `scene4a.png` + `scene4b.png`
-Cut from **a** → **b** on the word "meteor" (same low-angle framing in both, Alex
-small at the bottom looking up).
-- **4a (before):** a heavy flat **overcast** sky fills the frame, ominous, a
-  faint cream glow building behind the clouds — **no fireball yet**. Quiet dread.
-  → **push-in**.
-- **4b (reveal):** the clouds **part** to a brilliant **orange fireball** with a
-  cream-hot core, warm rim-light on the clouds; Alex lit orange, in awe. →
-  **push-in**.
-- *(Legacy `scene4.png` is the source for `scene4b.png`.)*
+### Scene 4 — It came from space  → **pan panel:** `scene4_pan.png` → **reaction:** `scene4_react.png`
+**(a) `scene4_pan`** — one **tall / portrait** image composed bottom-to-top so
+the camera can pan **up** across it; the pan lands the fireball on "meteor".
+- **Bottom:** Alex in a quiet backyard, seen from behind/below, looking up.
+- **Middle:** a heavy flat **overcast** cloud deck — the barrier between ground
+  and sky (she can't see through it).
+- **Top:** a brilliant **orange fireball** with a cream-hot core streaking across
+  a dark sky, clouds parting with warm rim-light.
+- *Generation note:* the image-gen pads portrait art into a 16:9 canvas, so crop
+  out the navy side-bars to a true portrait before use (done for `scene4_pan`).
+
+**(b) `scene4_react`** — a **16:9 close-up** the cut lands on at "Curiosity":
+Alex from the chest up, face tilted **up**, fear melted into **wide-eyed
+curiosity**, warm **orange glow** from the off-frame fireball rimming her, navy
+sky + soft clouds behind, two–three small cream/orange **?** doodles floating
+near her head. Full-bleed (no side-bars). Plays with a gentle **push-in**.
+- *(Legacy `scene4a`/`scene4b` (hard-cut version) and `scene4.png` kept on disk.)*
 
 ### Scene 11 — Your turn  → `scene11.png`
 Interior, warmer now. Alex at a desk, **determined and curious**, lit by a

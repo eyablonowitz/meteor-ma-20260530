@@ -32,7 +32,7 @@ VOICE_SETTINGS = {
     "similarity_boost": 0.75,
     "style": 0.0,
     "use_speaker_boost": True,
-    "speed": 0.9,                # < 1.0 = slower, more relaxed delivery
+    "speed": 1.0,                # 1.0 = natural pace (was 0.9; trying 1.0 this pass)
 }
 
 # Curated narrator shortlist for --audition (warm/curious explainer voices).
@@ -61,31 +61,26 @@ SCENES = {
         "It's a gray Saturday afternoon. You're home. Nothing special. And then "
         "\u2014 boom. A deep, double crack you feel in your chest. The windows "
         "rattle. The floor jumps. Your first thought: did a tree just hit the "
-        "house? Did something explode in the basement?"
+        "house?"
     ),
     "scene2": (
         "You go outside and see your neighbors on the street too. You're all "
-        "asking: did a transformer blow? A boiler? Someone says they heard sirens, "
-        "a mile away. Then you check your social media on your phone. It's not "
-        "just your street. People felt it ten, twenty, thirty miles away \u2014 in "
-        "every direction. People who listen to firefighter and police radios say "
-        "they don't know what happened either. And that's when it stops being "
-        "exciting\u2026 and starts being scary. A gas explosion? An attack? Is "
-        "anyone hurt?"
+        "asking: did you feel it? Someone says they heard sirens, a mile away. "
+        "You check social media. It's not just your street. People are talking "
+        "about a boom in towns that are miles and miles away. This is getting "
+        "scary. Did something big just blow up? Are people hurt?"
     ),
     "scene3": (
-        "But minutes pass. And something doesn't add up. With that many people "
-        "shaken, across that huge an area \u2014 nobody reports any real damage. "
-        "No fire. No rubble. No injuries. A blast that big, but that gentle on the "
-        "ground, can only mean one thing. Whatever exploded didn't go off near "
-        "anyone. It went off high above everyone."
+        "But as minutes pass, something doesn't add up. With that many people "
+        "shaken, across that huge an area \u2014 somebody should be reporting from "
+        "near the source. Seeing real damage. But so far\u2026 nothing."
     ),
     "scene4": (
-        "The sky exploded. A chunk of rock from space \u2014 a meteor \u2014 "
-        "slammed into the atmosphere and blew apart, miles up. And once the fear "
-        "fades, a better feeling takes over. Curiosity. Where exactly did the "
-        "meteor explode? And how big was the explosion? And you realize: you can "
-        "actually try to answer those questions yourself."
+        "A new hypothesis enters your head. And the fear begins to fade. Could it "
+        "have been\u2026 a meteor? Exploding high up in the sky, unseen? And now a "
+        "new feeling takes over. Curiosity. Where exactly did the meteor explode? "
+        "And how big was the explosion? And you realize: you can actually try to "
+        "answer those questions yourself."
     ),
     "scene5": (
         "You start with public data, and a little bit of code. Earthquake "
@@ -96,21 +91,19 @@ SCENES = {
     ),
     # Scene 6 = WHERE (sightings); now BEFORE the light/sound ruler.
     "scene6": (
-        "The first question you ask is: where did the meteor explode? The "
-        "American Meteor Society collects data on big meteor fireball sightings. "
-        "In Baltimore, people watched a fireball brighter than the full Moon in "
-        "broad daylight. Reports came in from nine states, and two Canadian "
-        "provinces. Some folks even caught it on their dashcams. But here, in "
-        "eastern Massachusetts \u2014 right underneath it? Clouds. We heard the "
-        "sky explode\u2026 but we couldn't see a thing. The people who could see "
-        "it were the ones far enough away to look over the clouds. You get a clue "
-        "from these reports that the meteor was probably over northeastern "
-        "Massachusetts when it was seen. But you can do better."
+        "You start with where. The American Meteor Society collects data on big "
+        "meteor sightings. As far south as Baltimore, people saw a fireball "
+        "brighter than the full Moon. Reports came in from nine states, and two "
+        "Canadian provinces. But here, in eastern Massachusetts \u2014 right "
+        "underneath it? Clouds. We heard the sky explode\u2026 but we couldn't "
+        "see a thing. The people who could see it were the ones far enough away "
+        "to look over the clouds. The sightings are helpful. But what you really "
+        "need is objective data."
     ),
     # Scene 7 = the ruler (light fast / sound slow); now AFTER sightings.
     "scene7": (
-        "The visual reports of the fireball cluster around 2:06 PM Eastern time. "
-        "But many people heard the boom around 2:11 \u2014 five minutes later. "
+        "Intriguingly, the reported sightings were at 2:06 PM. But you heard the "
+        "boom at 2:11 \u2014 five minutes later. "
         "That's not a mistake. Light travels at about 186,000 miles per second, "
         "effectively instantaneous to our senses. But sound is slow. It takes "
         "seconds or minutes to cover distances we see in everyday life. That's "
@@ -168,7 +161,7 @@ SCENES = {
     ),
     "scene11": (
         "But being wrong isn't failing. It's how we know there is more to learn. "
-        "There's a real, open question here. One that you could help answer. "
+        "There's a real, open question here \u2014 one that you could help answer. "
         "Ready to get started?"
     ),
 }

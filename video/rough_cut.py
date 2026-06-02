@@ -61,8 +61,8 @@ def clip(name, scene=None):
 #   cuts:  optional list of (phrase, offset_s); cut to the next shot at
 #          cue(phrase)+offset. Needs len(cuts) == len(shots)-1. Omit for a
 #          single-shot panel (it just gets a Ken-Burns move across the scene).
-def panel(shots, cuts=None):
-    return {"shots": shots, "cuts": cuts or []}
+def panel(shots, cuts=None, pan=False, reveal=None):
+    return {"shots": shots, "cuts": cuts or [], "pan": pan, "reveal": reveal}
 
 
 # storyboard order; (scene-key or None, kind, payload, kicker, title)
@@ -75,13 +75,13 @@ SEGMENTS = [
      "SCENE 1  \u2014  COMIC", "The thud"),
     ("scene2", "panel",
      panel([("scene2a.png", "push_in"), ("scene2b.png", "push_in")],
-           cuts=[("Then you check", 0.0)]),  # street -> cut to the phone
+           cuts=[("You check social media", 0.0)]),  # street -> cut to the phone
      "SCENE 2  \u2014  COMIC", "Bigger than your house"),
     ("scene3", "panel", panel([("scene3.png", "pull_out")]),
      "SCENE 3  \u2014  COMIC", "The clue in what didn't happen"),
     ("scene4", "panel",
-     panel([("scene4a.png", "push_in"), ("scene4b.png", "push_in")],
-           cuts=[("meteor", 0.0)]),  # overcast sky -> cut on "meteor" reveal
+     panel([("scene4_pan.png", "pan"), ("scene4_react.png", "push_in")],
+           cuts=[("Curiosity", 0.0)], pan=True, reveal=("meteor", 0.0)),
      "SCENE 4  \u2014  COMIC", "It came from space"),
     ("scene5", "clip", [clip("the_work")], "SCENE 5  \u2014  MANIM",
      "Not magic: public data + code"),
@@ -251,9 +251,52 @@ def motion_clip(out, img, dur, motion):
     return out
 
 
+def pan_clip(out, img, dur, t_cut, pan_dur=1.6):
+    """Vertical reveal across a TALL image: hold on the bottom (ground/clouds),
+    then pan straight up to the top (the fireball), centred on t_cut so the
+    reveal lands on the narration cue. Rendered on a 2x crop then downscaled so
+    the glide is sub-pixel smooth."""
+    n = max(2, int(round(dur * FPS)))
+    cw, ch = 2 * W, 2 * H
+    t0 = max(0.0, t_cut - pan_dur / 2.0)
+    # y(t): hold (ih-ch) until t0, ramp to 0 over pan_dur, then hold 0
+    y = f"(ih-{ch})*(1-clip((t-{t0:.3f})/{pan_dur:.3f},0,1))"
+    vf = (f"scale={cw}:-2,crop={cw}:{ch}:0:'{y}',scale={W}:{H},"
+          f"setsar=1,format=yuv420p,fps={FPS}")
+    run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", str(img),
+         "-vf", vf, "-frames:v", str(n), "-an",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", str(FPS), str(out)])
+    return out
+
+
 def build_panel(idx, key, spec, vo, dur):
     """Render a comic panel (one or more motion shots) and mux the VO."""
     shots = spec["shots"]
+    if spec.get("pan"):
+        # the `reveal` cue drives the up-pan (fireball uncovered on that word)
+        rev = spec.get("reveal")
+        rt = cue(key, rev[0]) if rev else None
+        t_cut = (_snap_to_silence(key, rt) + rev[1]) if rt is not None else dur * 0.3
+        if len(shots) == 1:
+            vis = pan_clip(WORK / f"vis{idx:02d}.mp4", COMIC / shots[0][0],
+                           dur, t_cut)
+            return seg_from_clip(idx, vis, vo, dur)
+        # pan shot [0, pan_end] then hard-cut to a follow-on shot (e.g. the
+        # curiosity reaction) for [pan_end, dur], cut on cuts[0].
+        ph, off = spec["cuts"][0]
+        pe = cue(key, ph)
+        pan_end = (_snap_to_silence(key, pe) + off) if pe is not None else dur * 0.6
+        pan_end = min(max(pan_end, t_cut + 1.2), dur - 1.2)
+        p1 = pan_clip(WORK / f"pan{idx:02d}_0.mp4", COMIC / shots[0][0],
+                      pan_end, t_cut)
+        p2 = motion_clip(WORK / f"pan{idx:02d}_1.mp4", COMIC / shots[1][0],
+                         dur - pan_end, shots[1][1])
+        lst = WORK / f"vis{idx:02d}.txt"
+        lst.write_text("".join(f"file '{p}'\n" for p in (p1, p2)))
+        vis = WORK / f"vis{idx:02d}.mp4"
+        run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+             "-i", str(lst), "-c", "copy", str(vis)])
+        return seg_from_clip(idx, vis, vo, dur)
     if len(shots) == 1:
         vis = motion_clip(WORK / f"vis{idx:02d}.mp4", COMIC / shots[0][0],
                           dur, shots[0][1])
