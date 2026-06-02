@@ -20,15 +20,16 @@ Durations are measured from the current cut (Bill VO at **1.0** pace).
 | 2 | **2 shots:** street + neighbors *(push-in)* → **cut on "You check social media"** → phone close-up, pins flooding outward *(push-in)* | COMIC | `scene2a`+`scene2b` | "It's not just your street… miles and miles away." | 29s |
 | 3 | Felt-pins **clustered** over NE-MA / SE-NH; magnifier finds **no** fire/rubble/injuries *(pull-out reveal)* | COMIC | `scene3` | "somebody should be reporting… but so far, nothing." | 19s |
 | 4 | **Pan-reveal → reaction:** Alex on the ground → camera pans **up** through the clouds → fireball (reveal on **"meteor"**) → **hard cut on "Curiosity"** to a close-up of curious, orange-lit Alex with floating **?** doodles | COMIC | `scene4_pan`+`scene4_react` | "Could it have been… a meteor? …Curiosity." | 26s |
-| 5 ◆ | Code window pulls public data → table → charts (+ "free/public", clean-data beat) | MANIM | `the_work.py` *(27s)* | "public data + code." | 27s ✓ |
+| 5 ◆ | Code window pulls public data → table → charts (+ "free/public", clean-data beat) | MANIM | `the_work.py` *(23s; tail hold trimmed)* | "public data + code." | 24s ✓ |
 | 6 | NE-US map; ~400 mi ring; sightings; Baltimore callout; clouds-overhead → **side-view cutaway** (distant line-of-sight clears the cloud, local view blocked by a red ✗) → **"imprecise sightings" illustration:** scattered observers' lines all aim at MA but cross in a **fuzzy zone, not a point** → "we need objective data" *(VO-paced via `_sync`)* | MANIM | `sightings_map.py` *(40s)* | "WHERE? seen far away — not here. The sightings are helpful… but we need objective data." | 40s ✓ ‹moved, was 7› |
 | 7 | Flash 2:06; slow ring + clock → BOOM; lightning/thunder; ruler *(light speed corrected to ~186,000 mi/s; clip re-synced)* | MANIM | `flash_to_boom.py` *(39s)* | "light fast, sound slow — a *ruler*." | 40s ✓ ‹moved, was 6› |
-| 8 | Network (earthquake mics, backyards) → arrival-time stamps → circles → **X** + answer *(beats paced to VO via `_sync`; script simplified)* | MANIM | `triangulation.py` *(56s)* | "trace the sound back to the source." | 56s ✓ |
-| 9 ◆**REWORKED** | Pitch=scale → boom waveform + ~2 s note → dial **≈ a couple hundred t TNT** *(with a live waveform that stretches high→low pitch as the needle climbs)* → lightning cluster | MANIM | `tnt_meter.py` *(redesigned, 56s)* | "HOW BIG? the boom's pitch is a scale." | 58s ✓ |
-| 10 | Asymmetry → matched pair *(10b unfolds step-by-step on the VO: towns → north "0" → south "8" → caption)* → wind theory **refuted** | MANIM | `southern_mystery.py` (**4 synced beats:** Why / Population / WindsTheory / WindsWrong) | "a puzzle: why all *south*? our theory was wrong, but that's ok." | 62s ‹moved, was 9› |
-| 11 | Teen at laptop; end card + links | COMIC+TEXT | — | "being wrong isn't failing… **your turn.**" | 14s ‹now carries the open-question close› |
+| 8 | Network (**seismometers + infrasound sensors**, backyards) → arrival-time stamps → circles → **X** + answer *(beats paced to VO via `_sync`; narration tightened + science nuance fixed)* | MANIM | `triangulation.py` *(47s)* | "trace the sound back to the source." | 48s ✓ ‹trimmed ~9s› |
+| 9 ◆**REWORKED** | Pitch=scale → boom waveform + ~2 s note → dial **≈ a couple hundred t TNT** ("a *rough* size; live waveform stretches high→low) → lightning cluster | MANIM | `tnt_meter.py` *(holds trimmed, 49s)* | "HOW BIG? the boom's pitch is a scale." | 50s ✓ ‹trimmed ~6s› |
+| 10 | **Crowd-south opener** (homes: 8 south vs 2 north) → matched pair *(10b unfolds on the VO: towns → north "0" → south "8" w/ flash → caption)* → wind theory **refuted** | MANIM | `southern_mystery.py` (**4 synced beats:** Why / Population / WindsTheory / WindsWrong) | "a puzzle: why all *south*? our theory was wrong, but that's ok." | 59s ‹moved, was 9› |
+| 11 | Teen at laptop; **screen shows the real NE sensor map + X + waveform + repo link** | COMIC+TEXT | `scene11_v2` | "being wrong isn't failing… **your turn.**" | 13s ‹regenerated; carries the open-question close› |
 
-**Total ≈ 6.3 min** (scratch cut: `video/rough_cut.mp4`; 1.0 pace).
+**Total ≈ 6.1 min** (scratch cut: `video/rough_cut.mp4`; 1.0 pace). Middle
+(scenes 8–9) tightened ~15s; Scene 10 opener no longer starts on an empty frame.
 
 ✓ **Freeze issue resolved:** the science clips were extended (more beats + holds)
 to track the richer narration; freezes are now ≤ ~4 s each.
@@ -38,9 +39,10 @@ to track the richer narration; freezes are now ≤ ~4 s each.
 cut — no more placeholder cards. Lead character "Alex" is a teenage girl.
 
 ✓ **Comic motion (Ken Burns):** each panel gets a move (push-in / pull-out /
-punch / drift). Rendered on a **3× (4K-ish) canvas** so `zoompan`'s whole-pixel
-crop steps become sub-pixel after downscale — fixes the earlier "micro-shake."
-`ZOOM = 0.18` (push/pull amount) is the single knob; raise/lower for more/less
+punch / drift). Rendered on a **4× canvas** so `zoompan`'s whole-pixel crop steps
+become sub-pixel after downscale — kills the "micro-shake" (bumped 3×→4× and
+softened the move after it crept back on the slower 1.0-pace pushes).
+`ZOOM = 0.14` (push/pull amount) is the single knob; raise/lower for more/less
 move. Panels can **split into multiple shots that hard-cut on a narration cue**
 — the cut time is `_sync.cue()` snapped to the nearest real pause
 (`silencedetect`), so it survives a re-voice. **Splits so far:** S1 (calm →
@@ -101,10 +103,26 @@ dropped), made **tangible** with one analogy.
 - Shot 10 mystery → `outputs/population_vs_response.png`, `beaming_test.png`,
   `raytrace_era5_duct_vs_azimuth.png` (the real per-capita + wind evidence).
 
+## Sound (scratch)
+- Auto-mixed UNDER the VO by `rough_cut.py` (`amix normalize=0` + limiter, so the
+  narration stays full level):
+  - **real meteor boom** on Scene 1's "boom" (cue-synced; the recording's peak
+    ~0.30 s in is aligned to the word, and its natural rolling decay carries
+    "the windows rattle, the floor jumps").
+    Source: `assets/sfx/freesound_community-russianmeteorite_sfx-76195.mp3`.
+  - a short **"theory was wrong" sting** on Scene 10c (synthesized, `video/sfx.py`).
+- Retired: the synthesized boom/rattle and the Scene 9 low rumble bed read as
+  distracting rather than helpful, so they were dropped (synth functions kept in
+  `video/sfx.py`, unused, in case we revisit).
+- Levels are restrained; tune via `SFX_CUES` gains in `rough_cut.py`. Swap for
+  licensed music/SFX at final mix.
+
 ## Asset status (for planning)
 - MANIM built: the_work, flash_to_boom, sightings_map, triangulation,
   southern_mystery (**4 sub-scenes**), tnt_meter (redesigned). double_boom (cut).
 - Big scene-title cards removed from all Manim shots (show, don't tell).
 - COMIC panels done & wired: scenes 1–4 (S4 = `scene4_pan` pan-reveal +
-  `scene4_react` reaction close-up), 11 in `video/assets/comic/`.
+  `scene4_react` reaction close-up), 11 (`scene11_v2` — real sensor-map screen)
+  in `video/assets/comic/`.
+- SOUND: scratch SFX synthesized by `video/sfx.py` (gitignored; regenerable).
 - Title/end cards: 2.

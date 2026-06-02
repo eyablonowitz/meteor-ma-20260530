@@ -31,6 +31,7 @@ video/*.mp4.part*
 video/_rough/
 video/manim/previews/
 video/assets/vo/auditions/
+video/assets/sfx/*.wav      # synthesized SFX, regenerable: python video/sfx.py
 
 # Non-reproducible generated source assets ARE tracked, via Git LFS
 # (see .gitattributes): video/assets/comic/*.png  +  video/assets/vo/*.mp3

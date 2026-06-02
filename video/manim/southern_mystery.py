@@ -144,6 +144,18 @@ class MysteryPopulation(Scene):
                   0.42).to_edge(UP, buff=0.4)
         self._play(FadeIn(sub), run_time=0.6)
 
+        # fill the opening (was an empty frame): the "more people south" guess --
+        # a crowd of homes to the south, only a couple to the north.
+        npos = [(-1.2, 2.0), (1.2, 2.05)]
+        spos = [(-3.7, -1.4), (-2.5, -2.3), (-1.3, -1.4), (-0.2, -2.3),
+                (1.0, -1.4), (2.2, -2.3), (3.5, -1.4), (0.7, -0.6)]
+        crowd_n = VGroup(*[house(MUTED, 0.2).move_to([x, y, 0]) for x, y in npos])
+        crowd_s = VGroup(*[house(TEAL, 0.2).move_to([x, y, 0]) for x, y in spos])
+        self._play(LaggedStart(*[GrowFromCenter(h) for h in crowd_n],
+                               lag_ratio=0.15), run_time=0.7)
+        self._play(LaggedStart(*[GrowFromCenter(h) for h in crowd_s],
+                               lag_ratio=0.1), run_time=1.3)
+
         axis = DashedLine([0, 2.7, 0], [0, -3.0, 0], color=MUTED, stroke_width=2)
         bsrc = star([0, 0.2, 0], r=0.24)
         bsrc_lbl = pop("blast", RED, 0.32).next_to(bsrc, RIGHT, buff=0.12)
@@ -167,6 +179,7 @@ class MysteryPopulation(Scene):
 
         # "we lined up towns of the same size, the same distance away"
         self._hold_until(C["lined"])
+        self._play(FadeOut(crowd_n), FadeOut(crowd_s), run_time=0.4)
         self._play(Create(axis), GrowFromCenter(bsrc), FadeIn(bsrc_lbl),
                    run_time=0.6)
         self._play(FadeIn(n_house), FadeIn(n_txt), GrowArrow(d_n),
@@ -177,9 +190,11 @@ class MysteryPopulation(Scene):
         self._hold_until(C["manch"])
         self._play(FadeIn(n_num, scale=1.3), FadeIn(n_rep), run_time=0.6)
 
-        # "Lowell, Massachusetts, to the south: eight"
+        # "Lowell, Massachusetts, to the south: eight" -- let it land hard
         self._hold_until(C["lowell"])
-        self._play(FadeIn(s_num, scale=1.3), FadeIn(s_rep), run_time=0.6)
+        self._play(FadeIn(s_num, scale=1.4), FadeIn(s_rep), run_time=0.5)
+        self._play(Flash(s_num, color=ORANGE, flash_radius=1.1, num_lines=16),
+                   Indicate(s_num, color=ORANGE, scale_factor=1.25), run_time=0.6)
 
         # "so it wasn't only about population"
         self._hold_until(C["concl"])

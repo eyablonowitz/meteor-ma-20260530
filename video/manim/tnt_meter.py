@@ -65,7 +65,7 @@ class TntMeter(Scene):
 
         sub0 = pop("The boom itself tells you.", MUTED, 0.5).to_edge(UP, buff=0.45)
         self.play(FadeIn(sub0))
-        self.wait(3.2)
+        self.wait(2.2)
         self.play(FadeOut(sub0))
 
         # ---- Panel 1: pitch is a scale (small=high snap vs giant=low rumble) ----
@@ -80,7 +80,7 @@ class TntMeter(Scene):
 
         self.play(Create(small), run_time=1.4)
         self.play(FadeIn(small_lbl, shift=RIGHT * 0.2))
-        self.wait(3.0)
+        self.wait(2.2)
         self.play(Create(big), run_time=2.4)
         self.play(FadeIn(big_lbl, shift=RIGHT * 0.2))
         self.wait(1.6)
@@ -90,7 +90,7 @@ class TntMeter(Scene):
         arrow = Arrow([-3.0, 0.9, 0], [-3.0, -0.5, 0], color=CREAM,
                       stroke_width=4, buff=0.1)
         self.play(GrowArrow(arrow), FadeIn(rule))
-        self.wait(4.5)
+        self.wait(3.0)
 
         self.play(*[FadeOut(m) for m in
                     (small, small_lbl, big, big_lbl, arrow, rule)])
@@ -110,7 +110,7 @@ class TntMeter(Scene):
         cyc_lbl = pop("one slow cycle \u2248 2 seconds", CREAM, 0.42).next_to(
             cyc, DOWN, buff=0.12)
         self.play(GrowFromCenter(cyc), FadeIn(cyc_lbl))
-        self.wait(3.8)
+        self.wait(2.6)
         self.play(*[FadeOut(m) for m in (sub, base, wave, cyc, cyc_lbl)])
 
         # ---- Panel 3: gauge swings to ~ a couple hundred tons of TNT ----
@@ -163,7 +163,7 @@ class TntMeter(Scene):
 
         ans = pop("a couple hundred tons of TNT", CREAM, 0.56).to_edge(DOWN, buff=0.5)
         self.play(FadeIn(ans, scale=1.1))
-        self.wait(3.8)
+        self.wait(2.8)
         self.play(*[FadeOut(m) for m in
                     (arc, ticks, unit, hub, ndl, rd, ans, live, wlbl)])
 
@@ -182,12 +182,12 @@ class TntMeter(Scene):
         self.play(FadeIn(lbl))
         self.play(LaggedStart(*[Indicate(b, color=CREAM, scale_factor=1.15)
                                 for b in bolts], lag_ratio=0.04), run_time=1.2)
-        self.wait(1.6)
+        self.wait(1.2)
         self.play(LaggedStart(*[Indicate(b, color=CREAM, scale_factor=1.12)
                                 for b in bolts], lag_ratio=0.03), run_time=1.0)
-        self.wait(0.8)
+        self.wait(0.6)
 
         tag = pop("Miles overhead \u2014 which is why it rattled New England.",
                   CREAM, 0.5).to_edge(DOWN, buff=0.4)
         self.play(FadeIn(tag))
-        self.wait(3.5)
+        self.wait(2.8)

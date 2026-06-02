@@ -115,7 +115,7 @@ class TheWork(Scene):
         tag = pop("then the real fun: ask the data questions",
                   ORANGE, 0.52).to_edge(DOWN, buff=0.35)
         self.play(FadeIn(tag))
-        self.wait(3.2)
+        self.wait(0.7)   # was 3.2 -- trimmed dead hold after the last line
 
     # ---- little icon builders ----
     def _table(self):

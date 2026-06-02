@@ -67,14 +67,14 @@ class Triangulation(Scene):
         sec = {k: 18.0 * dists[k] for k in sensors}   # illustrative seconds
 
         C = {
-            "net": cue("scene8", "It turns out that", lead=0.2),
-            "back": cue("scene8", "Many are run by amateurs", lead=0.2),
-            "boom": cue("scene8", "And many of them picked up", lead=0.2),
+            "net": cue("scene8", "It turns out", lead=0.2),
+            "back": cue("scene8", "in their own backyards", lead=0.2),
+            "boom": cue("scene8", "picked up our meteor boom", lead=0.2),
             "time": cue("scene8", "Crucially", lead=0.2),
             "reach": cue("scene8", "The boom reaches different sensors", lead=0.2),
             "lineup": cue("scene8", "Line up those arrival times", lead=0.2),
-            "prog": cue("scene8", "Our program reads through", lead=0.2),
-            "ans": cue("scene8", "And we get an answer", lead=0.1),
+            "prog": cue("scene8", "Our program does the math", lead=0.2),
+            "ans": cue("scene8", "we get an answer", lead=0.1),
         }
         END = vo_duration("scene8")
 
@@ -96,7 +96,7 @@ class Triangulation(Scene):
         self._hold_until(C["net"])
 
         # --- beat 2: a nationwide network of earthquake-detecting mics ---
-        net_lbl = pop("a nationwide network of earthquake-detecting microphones",
+        net_lbl = pop("a network of seismometers + infrasound sensors",
                       TEAL, 0.42).to_edge(DOWN, buff=0.4)
         self._play(FadeOut(intro_lbl), FadeIn(net_lbl), run_time=0.5)
         web = VGroup(*[

@@ -1,11 +1,13 @@
 # Video production guide — "The Day the Sky Exploded Over Massachusetts"
 
-A short (<5 min), classroom-friendly explainer for MA high-schoolers, built from
+A short (~6 min), classroom-friendly explainer for MA high-schoolers, built from
 the real analysis in this repo. The goal is to **spark curiosity and show that the
 data is explorable**, not to teach the analysis in detail.
 
 ## Locked creative decisions
-- **Length:** under 5 minutes (OK to drift to ~5:00 if it feels rushed).
+- **Length:** target **5–7 minutes** (current cut ~6:15). The earlier "<5 min"
+  goal was relaxed: this material earns the extra minute or two as long as the
+  middle stays tight. Trim flab, not the opener.
 - **Narration:** AI voice (no on-camera host).
 - **Visual style:** simple, stylized **comic-book** animation. *No photo-realism,
   no fake news footage.* Think clean flat colors, bold outlines, halftone dots,
@@ -27,7 +29,7 @@ data is explorable**, not to teach the analysis in detail.
 | 3. Science animations | **here → Manim** | the ~6 MANIM shots; render to mp4/png |
 | 4. Comic panels | **AI image-gen** (Midjourney / Flux / DALL·E) → light motion in editor or Runway/Kling | ~11 COMIC shots; keep a consistent style (see prompts) |
 | 5. Voiceover | **ElevenLabs** (or OpenAI TTS) | one clip per scene; ~150 wpm |
-| 6. Music + SFX | YouTube Audio Library / Epidemic Sound; SFX for boom/whoosh | keep light |
+| 6. Music + SFX | **real recording for the intro boom** + synthesized "wrong" sting (`sfx.py`); swap for YouTube Audio Library / Epidemic Sound at final mix | real meteor boom (`assets/sfx/*russianmeteorite*.mp3`) cue-synced to the word + a light "wrong" sting, auto-mixed by `rough_cut.py`; synth boom/rattle/rumble retired |
 | 7. Assemble + caption | **Descript** (text-based, easiest for VO) or **DaVinci Resolve** (free) | burn-in captions for classrooms |
 | 8. Review | accuracy + pacing pass | export 1080p |
 

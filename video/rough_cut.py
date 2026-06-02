@@ -40,7 +40,18 @@ from _sync import cue                                        # noqa: E402
 
 VO = ROOT / "video" / "assets" / "vo"
 COMIC = ROOT / "video" / "assets" / "comic"
+SFX = ROOT / "video" / "assets" / "sfx"
 OUT = ROOT / "video" / "rough_cut.mp4"
+
+# Sound design, mixed UNDER the narration. The intro boom is a real recording;
+# the "wrong" sting is still synthesized (see video/sfx.py).
+#   (scene_key, time_spec, file, gain)   time_spec: ("cue", phrase, off) | ("at", s)
+# off for the boom = -0.30 so the file's peak (~0.30s in) lands on the word.
+SFX_CUES = [
+    ("scene1", ("cue", "boom", -0.30),
+     "freesound_community-russianmeteorite_sfx-76195.mp3", 0.80),   # real meteor boom
+    ("scene10c2", ("at", 2.9), "sting.wav", 0.32),                  # "theory was wrong"
+]
 
 NAVY = "#0d1b2a"
 TEAL = "#2ec4b6"
@@ -101,7 +112,7 @@ SEGMENTS = [
      "SCENE 10c  \u2014  MANIM", "Wind-lens theory"),
     ("scene10c2", "clip", [clip("southern_mystery", "MysteryWindsWrong")],
      "SCENE 10c  \u2014  MANIM", "Theory wrong"),
-    ("scene11", "panel", panel([("scene11.png", "push_in")]),
+    ("scene11", "panel", panel([("scene11_v2.png", "push_in")]),
      "SCENE 11  \u2014  COMIC", "Your turn"),
 ]
 
@@ -195,8 +206,8 @@ def seg_from_clip(idx, vis, vo, dur):
 # whole pixels, so on a 3x canvas a 1px step is ~1/3px after downscale -> the
 # glide reads smooth instead of a 1px stutter ("shake"). ZOOM is the push/pull
 # amount; bump it for a more deliberate, cinematic move.
-UPSCALE = 3
-ZOOM = 0.18
+UPSCALE = 4      # bigger canvas -> finer sub-pixel steps -> smoother glide
+ZOOM = 0.14      # gentler push; large moves make zoompan's micro-steps visible
 
 
 def _zoom_expr(motion, n):
@@ -257,7 +268,7 @@ def pan_clip(out, img, dur, t_cut, pan_dur=1.6):
     reveal lands on the narration cue. Rendered on a 2x crop then downscaled so
     the glide is sub-pixel smooth."""
     n = max(2, int(round(dur * FPS)))
-    cw, ch = 2 * W, 2 * H
+    cw, ch = 3 * W, 3 * H
     t0 = max(0.0, t_cut - pan_dur / 2.0)
     # y(t): hold (ih-ch) until t0, ramp to 0 over pan_dur, then hold 0
     y = f"(ih-{ch})*(1-clip((t-{t0:.3f})/{pan_dur:.3f},0,1))"
@@ -327,10 +338,34 @@ def build_panel(idx, key, spec, vo, dur):
     return seg_from_clip(idx, vis, vo, dur)
 
 
+def mix_sfx(src, dst, abs_cues):
+    """Layer delayed SFX under the assembled cut (normalize=0 keeps the VO at
+    full level; a limiter catches summed peaks)."""
+    inputs = ["-i", str(src)]
+    for wav, _, _ in abs_cues:
+        inputs += ["-i", str(wav)]
+    fc, labels = [], ["[0:a]"]
+    for i, (wav, ta, g) in enumerate(abs_cues, start=1):
+        ms = int(max(0.0, ta) * 1000)
+        # normalize rate/layout first so mp3 + wav inputs mix cleanly with the bed
+        fc.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=stereo,"
+                  f"adelay={ms}:all=1,volume={g}[s{i}]")
+        labels.append(f"[s{i}]")
+    fc.append("".join(labels) + f"amix=inputs={len(abs_cues) + 1}:normalize=0,"
+              "alimiter=limit=0.95[a]")
+    run(["ffmpeg", "-y", "-loglevel", "error", *inputs,
+         "-filter_complex", ";".join(fc), "-map", "0:v", "-map", "[a]",
+         "-c:v", "copy", "-c:a", "aac", "-ar", "44100", "-ac", "2",
+         "-b:a", "128k", str(dst)])
+
+
 def main():
     segs = []
+    starts = {}
     total = 0.0
     for idx, (key, kind, payload, kicker, title) in enumerate(SEGMENTS):
+        if key:
+            starts[key] = total
         vo = VO / f"{key}.mp3" if key else None
         vo_dur = ffprobe_dur(vo) if vo and vo.exists() else 0.0
 
@@ -359,8 +394,29 @@ def main():
 
     lst = WORK / "concat.txt"
     lst.write_text("".join(f"file '{s}'\n" for s in segs))
+    raw = WORK / "cut_raw.mp4"
     run(["ffmpeg", "-y", "-loglevel", "error", "-fflags", "+genpts",
-         "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(OUT)])
+         "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(raw)])
+
+    # resolve SFX placements to absolute timeline positions and mix them in
+    abs_cues = []
+    for key, spec, wav, g in SFX_CUES:
+        wavp = SFX / wav
+        if key not in starts or not wavp.exists():
+            continue
+        if spec[0] == "cue":
+            ct = cue(key, spec[1])
+            if ct is None:
+                continue
+            ta = starts[key] + _snap_to_silence(key, ct) + spec[2]
+        else:
+            ta = starts[key] + spec[1]
+        abs_cues.append((wavp, ta, g))
+    if abs_cues:
+        mix_sfx(raw, OUT, abs_cues)
+        print(f"  sfx: mixed {len(abs_cues)} cue(s)")
+    else:
+        shutil.copy(raw, OUT)
     print(f"\nrough cut: {OUT.relative_to(ROOT)}  (~{total:.0f}s, {total/60:.1f} min)")
 
 
