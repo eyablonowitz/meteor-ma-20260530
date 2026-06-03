@@ -1,3 +1,4 @@
 video/assets/comic/*.png filter=lfs diff=lfs merge=lfs -text
 video/assets/vo/*.mp3 filter=lfs diff=lfs merge=lfs -text
 video/assets/sfx/*.mp3 filter=lfs diff=lfs merge=lfs -text
+video/assets/music/*.mp3 filter=lfs diff=lfs merge=lfs -text

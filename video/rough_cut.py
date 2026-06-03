@@ -13,8 +13,12 @@ Each segment runs for max(visual, narration) so nothing gets cut; the science
 clips freeze their last frame if the narration runs longer. Everything is
 normalized to 1280x720 / 30fps / AAC and concatenated into video/rough_cut.mp4.
 
-Usage:  python video/rough_cut.py
-Prereqs: run video/voiceover.py first (needs the <key>.mp3 files).
+Usage:  python video/rough_cut.py            # dev rough cut (with title card)
+        python video/rough_cut.py --share    # clean shareable build: drops the
+                                             # rough-cut card (opens cold on the
+                                             # Scene 1 hook), web-optimized
+                                             # (+faststart) -> meteor-ma-20260530.mp4
+Prereqs: run video/voiceover.py (VO) and video/music.py (outro) first.
 """
 import os
 import re
@@ -41,7 +45,9 @@ from _sync import cue                                        # noqa: E402
 VO = ROOT / "video" / "assets" / "vo"
 COMIC = ROOT / "video" / "assets" / "comic"
 SFX = ROOT / "video" / "assets" / "sfx"
+MUSIC = ROOT / "video" / "assets" / "music"
 OUT = ROOT / "video" / "rough_cut.mp4"
+SHARE_OUT = ROOT / "video" / "meteor-ma-20260530.mp4"  # clean build for sharing
 
 # Sound design, mixed UNDER the narration. The intro boom is a real recording;
 # the "wrong" sting is still synthesized (see video/sfx.py).
@@ -114,6 +120,8 @@ SEGMENTS = [
      "SCENE 10c  \u2014  MANIM", "Theory wrong"),
     ("scene11", "panel", panel([("scene11_v2.png", "push_in")]),
      "SCENE 11  \u2014  COMIC", "Your turn"),
+    ("outro", "outro", None, "OUTRO  \u2014  CREDITS",
+     "Thanks + retro-futuristic music"),
 ]
 
 
@@ -186,6 +194,22 @@ def concat_videos(idx, clips):
     out = WORK / f"vis{idx:02d}.mp4"
     run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
          "-i", str(lst), "-c", "copy", str(out)])
+    return out
+
+
+def seg_outro(idx, vis, music, dur, gain=0.85, fade_out=1.6):
+    """Outro segment: silent Manim credits visual + the generated music as its
+    own audio (gentle fade in/out, fit to the visual length)."""
+    out = WORK / f"seg{idx:02d}.mp4"
+    af = (f"[1:a]aresample=44100,volume={gain},"
+          f"afade=t=in:st=0:d=0.8,"
+          f"afade=t=out:st={max(0.0, dur - fade_out):.2f}:d={fade_out},"
+          f"apad,atrim=0:{dur:.3f}[a]")
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(vis), "-i", str(music),
+         "-filter_complex", f"[0:v]setsar=1[v];{af}",
+         "-map", "[v]", "-map", "[a]", "-t", f"{dur:.3f}",
+         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", str(FPS),
+         "-c:a", "aac", "-ar", "44100", "-ac", "2", "-b:a", "128k", str(out)])
     return out
 
 
@@ -340,7 +364,8 @@ def build_panel(idx, key, spec, vo, dur):
 
 def mix_sfx(src, dst, abs_cues):
     """Layer delayed SFX under the assembled cut (normalize=0 keeps the VO at
-    full level; a limiter catches summed peaks)."""
+    full level; a limiter catches summed peaks). Video is stream-copied and the
+    container is web-optimized (+faststart) so it streams without a full download."""
     inputs = ["-i", str(src)]
     for wav, _, _ in abs_cues:
         inputs += ["-i", str(wav)]
@@ -356,18 +381,35 @@ def mix_sfx(src, dst, abs_cues):
     run(["ffmpeg", "-y", "-loglevel", "error", *inputs,
          "-filter_complex", ";".join(fc), "-map", "0:v", "-map", "[a]",
          "-c:v", "copy", "-c:a", "aac", "-ar", "44100", "-ac", "2",
-         "-b:a", "128k", str(dst)])
+         "-b:a", "160k", "-movflags", "+faststart", str(dst)])
 
 
-def main():
+def main(share=False):
+    # The shareable build drops the "ROUGH CUT / scratch narration" title card so
+    # the film opens cold on the Scene 1 hook.
+    segments = [s for s in SEGMENTS
+                if not (share and s[1] == "card" and s[0] is None)]
+    out = SHARE_OUT if share else OUT
     segs = []
     starts = {}
     total = 0.0
-    for idx, (key, kind, payload, kicker, title) in enumerate(SEGMENTS):
+    for idx, (key, kind, payload, kicker, title) in enumerate(segments):
         if key:
             starts[key] = total
         vo = VO / f"{key}.mp3" if key else None
         vo_dur = ffprobe_dur(vo) if vo and vo.exists() else 0.0
+
+        if kind == "outro":
+            vis = concat_videos(idx, [clip("outro")])
+            dur = ffprobe_dur(vis)
+            music = MUSIC / "outro.mp3"
+            seg = (seg_outro(idx, vis, music, dur) if music.exists()
+                   else seg_from_image(idx, WORK / f"card{idx:02d}.png", None, dur))
+            segs.append(seg)
+            total += dur
+            print(f"  seg{idx:02d}  {kind:5s}  {title[:34]:34s}  {dur:5.1f}s  "
+                  f"{'+music' if music.exists() else '(no music)'}")
+            continue
 
         have_imgs = (kind == "panel" and payload and
                      all((COMIC / s[0]).exists() for s in payload["shots"]))
@@ -413,12 +455,18 @@ def main():
             ta = starts[key] + spec[1]
         abs_cues.append((wavp, ta, g))
     if abs_cues:
-        mix_sfx(raw, OUT, abs_cues)
+        mix_sfx(raw, out, abs_cues)
         print(f"  sfx: mixed {len(abs_cues)} cue(s)")
     else:
-        shutil.copy(raw, OUT)
-    print(f"\nrough cut: {OUT.relative_to(ROOT)}  (~{total:.0f}s, {total/60:.1f} min)")
+        shutil.copy(raw, out)
+    label = "share build" if share else "rough cut"
+    print(f"\n{label}: {out.relative_to(ROOT)}  (~{total:.0f}s, {total/60:.1f} min)")
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--share", action="store_true",
+                    help="drop the rough-cut title card and write the clean "
+                         "shareable build (video/meteor-ma-20260530.mp4)")
+    main(share=ap.parse_args().share)

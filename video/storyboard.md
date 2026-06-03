@@ -27,9 +27,11 @@ Durations are measured from the current cut (Bill VO at **1.0** pace).
 | 9 ◆**REWORKED** | Pitch=scale → boom waveform + ~2 s note → dial **≈ a couple hundred t TNT** ("a *rough* size; live waveform stretches high→low) → lightning cluster | MANIM | `tnt_meter.py` *(holds trimmed, 49s)* | "HOW BIG? the boom's pitch is a scale." | 50s ✓ ‹trimmed ~6s› |
 | 10 | **Crowd-south opener** (homes: 8 south vs 2 north) → matched pair *(10b unfolds on the VO: towns → north "0" → south "8" w/ flash → caption)* → wind theory **refuted** | MANIM | `southern_mystery.py` (**4 synced beats:** Why / Population / WindsTheory / WindsWrong) | "a puzzle: why all *south*? our theory was wrong, but that's ok." | 59s ‹moved, was 9› |
 | 11 | Teen at laptop; **screen shows the real NE sensor map + X + waveform + repo link** | COMIC+TEXT | `scene11_v2` | "being wrong isn't failing… **your turn.**" | 13s ‹regenerated; carries the open-question close› |
+| Outro | **Credits card** (no VO): dawn-horizon glow + starfield + a shooting star → "Thank you" → thanks to sighting / "Did You Feel It?" reporters → open-data providers → repo link, over **retro-futuristic music** | MANIM + MUSIC | `outro.py` + `assets/music/outro.mp3` | *(instrumental only)* | 16s |
 
-**Total ≈ 6.1 min** (scratch cut: `video/rough_cut.mp4`; 1.0 pace). Middle
-(scenes 8–9) tightened ~15s; Scene 10 opener no longer starts on an empty frame.
+**Total ≈ 6.3 min** (scratch cut: `video/rough_cut.mp4`; 1.0 pace). Middle
+(scenes 8–9) tightened ~15s; Scene 10 opener no longer starts on an empty frame;
+a ~16s music-driven credits outro closes the film.
 
 ✓ **Freeze issue resolved:** the science clips were extended (more beats + holds)
 to track the richer narration; freezes are now ≤ ~4 s each.
@@ -116,6 +118,15 @@ dropped), made **tangible** with one analogy.
   `video/sfx.py`, unused, in case we revisit).
 - Levels are restrained; tune via `SFX_CUES` gains in `rough_cut.py`. Swap for
   licensed music/SFX at final mix.
+
+## Music
+- **Outro credits bed:** optimistic, retro-futuristic instrumental (1980s/90s
+  EPCOT "tomorrow" vibe) generated with the **ElevenLabs Music API**
+  (`video/music.py`, `force_instrumental`), saved to `assets/music/outro.mp3`.
+- Baked into the outro segment by `rough_cut.py` (`seg_outro`: fit to the visual
+  length with a 0.8 s fade-in / 1.6 s fade-out). Re-roll a new take with
+  `python video/music.py --force`; keep alternates with `--name outro_b`.
+- It's the only place with music; scenes 1–11 stay VO-driven.
 
 ## Asset status (for planning)
 - MANIM built: the_work, flash_to_boom, sightings_map, triangulation,

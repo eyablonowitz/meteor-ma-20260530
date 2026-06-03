@@ -5,7 +5,7 @@ the real analysis in this repo. The goal is to **spark curiosity and show that t
 data is explorable**, not to teach the analysis in detail.
 
 ## Locked creative decisions
-- **Length:** target **5–7 minutes** (current cut ~6:15). The earlier "<5 min"
+- **Length:** target **5–7 minutes** (current cut ~6:18, incl. a ~16s outro). The earlier "<5 min"
   goal was relaxed: this material earns the extra minute or two as long as the
   middle stays tight. Trim flab, not the opener.
 - **Narration:** AI voice (no on-camera host).
@@ -29,7 +29,7 @@ data is explorable**, not to teach the analysis in detail.
 | 3. Science animations | **here → Manim** | the ~6 MANIM shots; render to mp4/png |
 | 4. Comic panels | **AI image-gen** (Midjourney / Flux / DALL·E) → light motion in editor or Runway/Kling | ~11 COMIC shots; keep a consistent style (see prompts) |
 | 5. Voiceover | **ElevenLabs** (or OpenAI TTS) | one clip per scene; ~150 wpm |
-| 6. Music + SFX | **real recording for the intro boom** + synthesized "wrong" sting (`sfx.py`); swap for YouTube Audio Library / Epidemic Sound at final mix | real meteor boom (`assets/sfx/*russianmeteorite*.mp3`) cue-synced to the word + a light "wrong" sting, auto-mixed by `rough_cut.py`; synth boom/rattle/rumble retired |
+| 6. Music + SFX | **ElevenLabs Music** outro bed (`music.py`) + **real recording** for the intro boom + synthesized "wrong" sting (`sfx.py`); swap for licensed tracks at final mix | retro-futuristic instrumental on the credits outro (`assets/music/outro.mp3`); real meteor boom (`assets/sfx/*russianmeteorite*.mp3`) cue-synced to the word + a light "wrong" sting; all auto-mixed by `rough_cut.py`; synth boom/rattle/rumble retired |
 | 7. Assemble + caption | **Descript** (text-based, easiest for VO) or **DaVinci Resolve** (free) | burn-in captions for classrooms |
 | 8. Review | accuracy + pacing pass | export 1080p |
 
@@ -117,6 +117,7 @@ current Bill cut (~0.9 pace).
 | `southern_mystery.py` | `MysteryPopulation` | 10b — matched pair (NH 0 vs MA 8) | 29.4s |
 | `southern_mystery.py` | `MysteryWindsTheory` | 10c-1 — wind-lens theory + pulling wind data | 12.6s |
 | `southern_mystery.py` | `MysteryWindsWrong` | 10c-2 — real winds sideways → WRONG | 7.3s |
+| `outro.py` | `Outro` | Outro — credits + thanks (music-driven, no VO) | 15.9s |
 
 `double_boom.py` is retained on disk but **cut** from the video.
 
@@ -129,7 +130,8 @@ manim -qm video/manim/the_work.py TheWork
 for v in the_work:TheWork sightings_map:SightingsMap flash_to_boom:FlashToBoom \
          triangulation:Triangulation tnt_meter:TntMeter \
          southern_mystery:MysteryWhy southern_mystery:MysteryPopulation \
-         southern_mystery:MysteryWindsTheory southern_mystery:MysteryWindsWrong; do
+         southern_mystery:MysteryWindsTheory southern_mystery:MysteryWindsWrong \
+         outro:Outro; do
   manim -qm "video/manim/${v%%:*}.py" "${v##*:}"
 done
 ```
