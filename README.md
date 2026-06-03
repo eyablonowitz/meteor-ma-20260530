@@ -3,24 +3,66 @@
 On Saturday **2026-05-30 ~18:06 UTC (2:06 pm EDT)** a daylight bolide (large
 meteor) fragmented over New England. A loud "double boom" and a pressure wave
 that rattled buildings were reported across eastern Massachusetts and Rhode
-Island. NASA put the breakup at ~40 mi (64 km) altitude over NE MA / SE NH and
-estimated the energy at **~300 tons of TNT** (derived from GOES-19 GLM *optical*
-energy). USGS logged it as event **`us7000spjy`** — type *"other event /
+Island. NASA put the breakup at 40 mi (64 km) altitude over NE MA / SE NH and
+estimated the energy at 300 tons of TNT (believed to be derived from GOES-19 GLM *optical*
+energy). USGS logged it as event `**us7000spjy`** — type *"other event /
 Sonic Boom"*, no earthquake — but the air-coupled pressure wave **was** recorded
 on seismometers.
 
 This project uses **open seismo-acoustic data** to independently answer:
 
 1. **Geometry** — where was the acoustic source (lat/lon/**altitude**) and what
-   was the trajectory? Resolves the apparent NASA ("NE MA / SE NH") vs. GOES
+  was the trajectory? Resolves the apparent NASA ("NE MA / SE NH") vs. GOES
    ("over the bays") location discrepancy.
 2. **What did people hear/feel** — a near-spherical **airburst blast** from the
-   fragmentation, a **ballistic sonic boom** along the hypersonic track, or both?
+  fragmentation, a **ballistic sonic boom** along the hypersonic track, or both?
 3. **Energy** — is **300 tons of TNT** consistent with *acoustic* energy
-   estimates that are independent of the GLM-optical number?
+  estimates that are independent of the GLM-optical number?
 
 CNEOS/JPL's USG-sensor fireball database has **no record** for this event, so the
 acoustic estimates here are fully independent of NASA's figure.
+
+## Story and Video
+
+In addition to the data analysis, this repo was created to be a learning tool.
+The goal was to learn about the meteor itself, but also techniques to use AI-assisted
+coding in the anaysis. See [story.md](STORY.md) for a narrative take on how this unfolded.
+
+Along similiar lines, this repo also contains code to build a learning video aimed middle/high school students.
+See [video/README.md.](video/README.md) for more details. 
+The resulting [video can be found on YouTube](https://www.youtube.com/watch?v=zvLkeRWiATA).
+
+## Motivation
+
+I heard and felt the boom as did many of my friends and neighbors.  I'm a software 
+engineer not a scientist. But some of the conflicting information that came out got 
+me really interested in digging in.  For example, did the meteor explode over Cape Cod 
+Bay as many asserted based on widely circulated satellite data?  Or over the MA-NH 
+eastern border as NASA tweeted:
+https://x.com/NASASpaceAlerts/status/2060854183155106193
+
+And how did NASA figure out that the explosion was the equivalent of 300 tons of TNT?
+
+## AI use
+
+This work was also a chance for me to extend my AI coding skills in new directions 
+(science and video production). AI (mostly Claude Opus 4.8 in Cursor) played a big part in this. 
+I leaned heavily on AI to help me work through areas of the science I did not understand.
+In other cases, I was primarily driving the inquiry with the AI just acting as a code assistant.
+Either way, often AI would do some analysis, draw some conclusions, but leave some critical question
+unexplored. So the process required my critical thinking to ask those questions and push the analysis
+forward. 
+
+It was similar with the video. I sketched out the script, but AI helped me turn it into a 
+storyboard. And then we iterated in the script/storyboard until we were ready to write 
+some code. Once we were able to produce a rough-cut video, we went through several rapid 
+stages of iteration to get to the script, animations that you see now. The whole thing 
+took several hours. But it would have taken weeks without AI.
+
+ All-in-all, this really felt like collaboration with AI. I'm genuinely conflicted about how 
+ much pride and ownership to feel in the final product. So in addition to this being a 
+ learning / teaching tool about a meteor, my hope is that it can also stimulate discussion 
+ about AI in amateur/student science and creative work.
 
 ## Approach (acoustic-first)
 
